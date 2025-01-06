@@ -18,8 +18,7 @@ export default function Main() {
             <Button
               variant="primary"
               size="large"
-              //   onClick={() => navigate("/home")}
-              className={css.ctaButton}
+              onClick={() => navigate("/signin")}
             >
               Почати користуватися
             </Button>
