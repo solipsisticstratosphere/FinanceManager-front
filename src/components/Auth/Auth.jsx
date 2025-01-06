@@ -26,7 +26,6 @@ const PasswordInput = ({ field, isVisible, toggleVisibility, ...props }) => {
 };
 
 const Auth = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const isSignIn = location.pathname === "/signin";
 
@@ -41,17 +40,17 @@ const Auth = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email("Неверный формат email")
-      .required("Email обязателен"),
+      .email("Невiрний формат email")
+      .required("Емейл є обов'язковим"),
     password: Yup.string()
-      .min(6, "Минимум 6 символов")
-      .required("Пароль обязателен"),
+      .min(6, "Мiнiмум 6 символiв")
+      .required("Пароль є обов'язковим"),
     ...(isSignIn
       ? {}
       : {
           confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
-            .required("Подтверждение пароля обязательно"),
+            .oneOf([Yup.ref("password"), null], "Паролі повинні співпадати")
+            .required("Підтвердження паролю є обов'язковим"),
         }),
   });
 
@@ -65,7 +64,7 @@ const Auth = () => {
       <div className={styles.formWrapper}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            {isSignIn ? "Вход в аккаунт" : "Регистрация"}
+            {isSignIn ? "Увiйти до аккаунту" : "Реєстрація"}
           </h2>
         </div>
         <Formik
@@ -80,7 +79,7 @@ const Auth = () => {
                   name="email"
                   type="email"
                   className={styles.input}
-                  placeholder="Email"
+                  placeholder="Емейл"
                 />
                 {errors.email && touched.email && (
                   <div className={styles.error}>{errors.email}</div>
@@ -111,7 +110,7 @@ const Auth = () => {
                     {({ field }) => (
                       <PasswordInput
                         {...field}
-                        placeholder="Подтвердите пароль"
+                        placeholder="Підтвердіть пароль"
                         isVisible={confirmPasswordVisible}
                         toggleVisibility={() =>
                           setConfirmPasswordVisible(!confirmPasswordVisible)
@@ -130,7 +129,7 @@ const Auth = () => {
                 disabled={isSubmitting}
                 className={styles.button}
               >
-                {isSignIn ? "Войти" : "Зарегистрироваться"}
+                {isSignIn ? "Увiйти" : "Зареєструватися"}
               </button>
             </Form>
           )}
@@ -141,8 +140,8 @@ const Auth = () => {
           className={styles.switchLink}
         >
           {isSignIn
-            ? "Нет аккаунта? Зарегистрируйтесь"
-            : "Уже есть аккаунт? Войдите"}
+            ? "Немає аккаунту? Зареєструйтеся"
+            : "Вже є аккаунт? Увiйти"}
         </Link>
       </div>
     </div>
