@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import styles from "./Auth.module.css";
+import { useDispatch } from "react-redux";
+import { selectIsLoggedIn } from "../../redux/auth/selectors";
+import { logIn, register } from "../../redux/auth/operations";
 
 const PasswordInput = ({ field, isVisible, toggleVisibility, ...props }) => {
   return (
@@ -26,9 +29,10 @@ const PasswordInput = ({ field, isVisible, toggleVisibility, ...props }) => {
 };
 
 const Auth = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const isSignIn = location.pathname === "/signin";
-
+  const dispatch = useDispatch();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
@@ -54,9 +58,30 @@ const Auth = () => {
         }),
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    setSubmitting(false);
+  const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+    try {
+      if (isSignIn) {
+        await dispatch(
+          logIn({
+            email: values.email,
+            password: values.password,
+          })
+        ).unwrap();
+      } else {
+        await dispatch(
+          register({
+            email: values.email,
+            password: values.password,
+          })
+        ).unwrap();
+      }
+    } catch (error) {
+      if (error.message) {
+        setFieldError("email", error.message);
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
