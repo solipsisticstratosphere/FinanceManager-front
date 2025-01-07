@@ -43,3 +43,36 @@ export const logIn = createAsyncThunk(
     }
   }
 );
+
+export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
+  try {
+    await axios.post("/auth/logout");
+    clearAuthHeader();
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const refreshUser = createAsyncThunk(
+  "auth/refresh",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const persistedToken = state.auth.token;
+
+    if (!persistedToken) {
+      return thunkAPI.rejectWithValue("No token found");
+    }
+
+    try {
+      setAuthHeader(persistedToken);
+      const { data } = await axios.get("/users/current");
+      return data.data;
+    } catch (error) {
+      clearAuthHeader();
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);

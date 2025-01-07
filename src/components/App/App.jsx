@@ -6,10 +6,28 @@ import MainPage from "../../pages/MainPage/MainPage";
 import PublicRegisterRoute from "../../routes/PublicRegisterRoute";
 import SignupPage from "../../pages/SignUpPage/SignupPage";
 import SinginPage from "../../pages/SignInPage/SigninPage";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectIsLoggedIn,
+  selectIsRefreshing,
+  selectIsRegistered,
+} from "../../redux/auth/selectors";
+import { Suspense, useEffect, useRef } from "react";
+import { refreshUser } from "../../redux/auth/operations";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function App() {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(refreshUser());
+    }
+  }, [dispatch, token]);
+
   return (
-    <>
+    <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         <Route index element={<Navigate to="/landing" />} />
         <Route
@@ -40,6 +58,6 @@ export default function App() {
           }
         />
       </Routes>
-    </>
+    </Suspense>
   );
 }
