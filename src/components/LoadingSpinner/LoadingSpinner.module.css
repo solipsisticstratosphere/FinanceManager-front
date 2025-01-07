@@ -1,0 +1,35 @@
+.container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.spinnerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.spinner {
+  height: 48px;
+  width: 48px;
+  animation: spin 1s linear infinite;
+  color: #3b82f6; /* Blue color */
+}
+
+.text {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 500; /* font-medium */
+  color: #374151; /* text-gray-700 */
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

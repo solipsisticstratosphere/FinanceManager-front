@@ -1,12 +1,16 @@
 import { useSelector } from "react-redux";
-import { selectIsLoggedIn, selectIsRefreshing } from "../redux/auth/selectors";
 import { Navigate } from "react-router-dom";
+import { selectIsLoggedIn, selectIsRefreshing } from "../redux/auth/selectors";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 export default function PrivateRoute({ redirectTo = "/landing", component }) {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const isRefreshing = useSelector(selectIsRefreshing);
+  const token = useSelector((state) => state.auth.token);
 
-  const requireRedirect = !isLoggedIn && !isRefreshing;
+  if (isRefreshing || (token && !isLoggedIn)) {
+    return <LoadingSpinner />;
+  }
 
-  return requireRedirect ? <Navigate to={redirectTo} /> : component;
+  return !isLoggedIn && !token ? <Navigate to={redirectTo} /> : component;
 }
