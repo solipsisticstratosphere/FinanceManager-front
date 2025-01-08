@@ -1,0 +1,68 @@
+.container {
+  padding: 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.gridMd3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.button {
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #2563eb;
+}
+
+.valueRed {
+  color: #ef4444;
+}
+
+.valueGreen {
+  color: #10b981;
+}
+
+.chart {
+  margin-top: 2rem;
+}
