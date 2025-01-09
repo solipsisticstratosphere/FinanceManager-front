@@ -1,48 +1,70 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
-// import { fetchDashboardData, updateBalance } from "../redux/actions/dashboard";
-import styles from "./Dashboard.module.css";
+import TransactionModal from "../TransactionModal/TransactionModal";
 import { fetchBalance, updateBalance } from "../../redux/balance/operations";
 import {
   selectBalance,
   selectErrorBalance,
   selectLoadingBalance,
 } from "../../redux/balance/selectors";
+import {
+  selectLoadingTransactions,
+  selectTotalExpenses,
+  selectTransactions,
+  selectTransactionsError,
+} from "../../redux/transactions/selectors";
+import { fetchTransactions } from "../../redux/transactions/operations";
+import styles from "./Dashboard.module.css";
+import { logout } from "../../redux/auth/operations";
+import Button from "../Buttons/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newBalance, setNewBalance] = useState("");
+  const isLoadingTransactions = useSelector(selectLoadingTransactions);
+  const transactionsError = useSelector(selectTransactionsError);
+  const transactions = useSelector(selectTransactions);
+  const totalExpenses = useSelector(selectTotalExpenses);
   const balance = useSelector(selectBalance);
   const isLoading = useSelector(selectLoadingBalance);
   const error = useSelector(selectErrorBalance);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("Dashboard mounted, dispatching fetch actions");
+    dispatch(fetchTransactions()).then((result) => {
+      console.log("Fetch transactions result:", result);
+    });
     dispatch(fetchBalance());
   }, [dispatch]);
+  const handleLogout = () => {
+    dispatch(logout())
+      .unwrap()
+      .then(() => {
+        console.log("Успешный выход из системы");
 
+        navigate("/signin");
+      })
+      .catch((err) => {
+        console.error("Ошибка при выходе из системы:", err);
+      });
+  };
   const handleBalanceUpdate = () => {
     if (!newBalance) return;
     dispatch(updateBalance(Number(newBalance)))
       .unwrap()
       .then(() => setNewBalance(""))
-      .catch((error) => {
-        // Обработка ошибки, например показ уведомления
-        console.error("Failed to update balance:", error);
-      });
+      .catch((err) => console.error("Failed to update balance:", err));
   };
 
   return (
     <div className={styles.container}>
-      <div className={`${styles.grid} ${styles.gridMd3}`}>
+      <Button variant="primary" size="large" onClick={handleLogout}>
+        Выход
+      </Button>
+      <div className={styles.grid}>
         <div className={styles.card}>
           <h2 className={styles.title}>Баланс</h2>
           <p className={styles.value}>
@@ -67,29 +89,82 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* <div className={styles.card}>
-          <h2 className={styles.title}>Расходы</h2>
-          <p className={`${styles.value} ${styles.valueRed}`}>-{expenses} ₽</p>
-        </div>
-
         <div className={styles.card}>
-          <h2 className={styles.title}>До цели</h2>
-          <p className={`${styles.value} ${styles.valueGreen}`}>
-            {targetProgress} ₽
+          <h2 className={styles.title}>Расходы</h2>
+          <p className={`${styles.value} ${styles.valueRed}`}>
+            {totalExpenses} ₽
           </p>
-        </div> */}
+        </div>
       </div>
 
-      {/* <div className={`${styles.card} ${styles.chart}`}>
-        <h2 className={styles.title}>Динамика расходов</h2>
-        <LineChart width={800} height={300} data={spendingGraph}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="amount" stroke="#8884d8" />
-        </LineChart>
-      </div> */}
+      <div className={styles.transactionsCard}>
+        <div className={styles.transactionsHeader}>
+          <h2 className={styles.transactionsTitle}>Транзакции</h2>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className={styles.addButton}
+          >
+            Добавить
+          </button>
+        </div>
+        <div className={styles.transactionsList}>
+          {isLoadingTransactions ? (
+            <p>Загрузка транзакций</p>
+          ) : transactionsError ? (
+            <p>Ошибка: {transactionsError}</p>
+          ) : transactions && transactions.length > 0 ? (
+            transactions.map((transaction) => (
+              <div
+                key={transaction._id}
+                className={`
+                ${styles.transactionItem} 
+                ${
+                  transaction.type === "expense"
+                    ? styles.expense
+                    : styles.income
+                }
+              `}
+              >
+                <div className={styles.transactionContent}>
+                  <h3 className={styles.transactionCategory}>
+                    {transaction.category}
+                  </h3>
+                  <p className={styles.transactionDescription}>
+                    {transaction.description}
+                  </p>
+                </div>
+                <div className={styles.transactionDetails}>
+                  <p
+                    className={`
+                    ${styles.transactionAmount} 
+                    ${
+                      transaction.type === "expense"
+                        ? styles.amountRed
+                        : styles.amountGreen
+                    }
+                  `}
+                  >
+                    {transaction.type === "expense" ? "-" : "+"}
+                    {transaction.amount} ₽
+                  </p>
+                  <p className={styles.transactionDate}>
+                    {new Date(transaction.date).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Транзакции не найдены</p>
+          )}
+        </div>
+      </div>
+
+      {isModalOpen && (
+        <TransactionModal
+          onClose={() => setIsModalOpen(false)}
+          currentBalance={balance}
+        />
+      )}
     </div>
   );
 };

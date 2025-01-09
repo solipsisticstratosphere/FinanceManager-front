@@ -66,3 +66,95 @@
 .chart {
   margin-top: 2rem;
 }
+
+.transactionsCard {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.transactionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.transactionsTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.addButton {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.addButton:hover {
+  background-color: #2563eb;
+}
+
+.transactionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transactionItem {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.expense {
+  background-color: #fef6f6;
+  border: 1px solid #f5c6c6;
+}
+
+.income {
+  background-color: #f6fef6;
+  border: 1px solid #c6f5c6;
+}
+
+.transactionContent {
+  flex-grow: 1;
+}
+
+.transactionCategory {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.transactionDescription {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.transactionDetails {
+  text-align: right;
+}
+
+.transactionAmount {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.amountRed {
+  color: #ef4444;
+}
+
+.amountGreen {
+  color: #10b981;
+}
+
+.transactionDate {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}

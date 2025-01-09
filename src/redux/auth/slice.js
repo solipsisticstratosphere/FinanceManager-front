@@ -54,7 +54,6 @@ const slice = createSlice({
         state.isLoading = true;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.isLoading = false;
         return initialState;
       })
       .addCase(logout.rejected, (state, { payload }) => {
