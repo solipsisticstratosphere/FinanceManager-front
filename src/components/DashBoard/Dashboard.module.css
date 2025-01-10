@@ -158,3 +158,113 @@
   font-size: 0.75rem;
   color: #9ca3af;
 }
+.goalsCard {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.goalsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.goalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.goalItem {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activeGoal {
+  border-color: #2196f3;
+  background-color: #f5f9ff;
+}
+
+.goalContent {
+  flex: 1;
+}
+
+.goalProgress {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: #2196f3;
+  transition: width 0.3s ease;
+}
+
+.goalActions {
+  display: flex;
+  gap: 10px;
+}
+
+.activateButton,
+.deactivateButton,
+.deleteButton {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.activateButton {
+  background-color: #2196f3;
+  color: white;
+}
+
+.deactivateButton {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.deleteButton {
+  background-color: #ff5252;
+  color: white;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
