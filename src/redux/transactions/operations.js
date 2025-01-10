@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchBalance } from "../balance/operations";
+import { fetchGoals } from "../goals/operations";
 
 export const fetchTransactions = createAsyncThunk(
   "transactions/fetchTransactions",
@@ -26,10 +27,10 @@ export const addTransaction = createAsyncThunk(
     try {
       const { data } = await axios.post("/transactions", transaction);
 
-      // Выполним запросы параллельно
       await Promise.all([
         thunkAPI.dispatch(fetchTransactions()),
         thunkAPI.dispatch(fetchBalance()),
+        thunkAPI.dispatch(fetchGoals()),
       ]);
 
       return data;
