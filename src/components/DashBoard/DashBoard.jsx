@@ -31,6 +31,17 @@ import {
   fetchGoals,
   setActiveGoal,
 } from "../../redux/goals/operations";
+import {
+  CartesianAxis,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { DollarSign, Target, TrendingDown } from "lucide-react";
 
 const Dashboard = () => {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
@@ -115,6 +126,68 @@ const Dashboard = () => {
     }
   };
 
+  const processTransactionsForChart = () => {
+    if (!transactions?.length) return [];
+
+    const dailyTotals = new Map();
+
+    const sortedTransactions = [...transactions].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+
+    sortedTransactions.forEach((transaction) => {
+      const date = new Date(transaction.date).toLocaleDateString("ru-RU");
+
+      if (!dailyTotals.has(date)) {
+        dailyTotals.set(date, {
+          date,
+          expenses: 0,
+          income: 0,
+        });
+      }
+
+      const daily = dailyTotals.get(date);
+      if (transaction.type === "expense") {
+        daily.expenses += transaction.amount;
+      } else {
+        daily.income += transaction.amount;
+      }
+    });
+
+    // Convert map to array and sort by date
+    return Array.from(dailyTotals.values())
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(-7); // Get last 7 days
+  };
+
+  const calculateAmountToGoal = () => {
+    if (!activeGoal) return 0;
+    return activeGoal.targetAmount - activeGoal.currentAmount;
+  };
+
+  const chartData = processTransactionsForChart();
+
+  // Custom tooltip formatter for the chart
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className={styles.tooltip}>
+          <p className={styles.tooltipText}>{label}</p>
+          {payload.map((entry, index) => (
+            <p
+              key={index}
+              className={styles.tooltipEntry}
+              style={{ color: entry.color }}
+            >
+              {entry.name}: {entry.value.toLocaleString()} ₽
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={styles.container}>
       <Button variant="primary" size="large" onClick={handleLogout}>
@@ -122,10 +195,17 @@ const Dashboard = () => {
       </Button>
       <div className={styles.grid}>
         <div className={styles.card}>
-          <h2 className={styles.title}>Баланс</h2>
-          <p className={styles.value}>
-            {isLoading ? "Загрузка..." : `${balance} ₽`}
-          </p>
+          <div className={styles.statsCard}>
+            <div className={`${styles.iconWrapper} ${styles.iconWrapperBlue}`}>
+              <DollarSign className={`${styles.icon} ${styles.iconBlue}`} />
+            </div>
+            <div className={styles.statsContent}>
+              <p className={styles.statsLabel}>Баланс</p>
+              <p className={styles.statsValue}>
+                {isLoading ? "Загрузка..." : `${balance} ₽`}
+              </p>
+            </div>
+          </div>
           <div>
             <input
               type="number"
@@ -146,10 +226,31 @@ const Dashboard = () => {
         </div>
 
         <div className={styles.card}>
-          <h2 className={styles.title}>Расходы</h2>
-          <p className={`${styles.value} ${styles.valueRed}`}>
-            {totalExpenses} ₽
-          </p>
+          <div className={styles.statsCard}>
+            <div className={`${styles.iconWrapper} ${styles.iconWrapperRed}`}>
+              <TrendingDown className={`${styles.icon} ${styles.iconRed}`} />
+            </div>
+            <div className={styles.statsContent}>
+              <p className={styles.statsLabel}>Расходы</p>
+              <p className={`${styles.statsValue} ${styles.valueRed}`}>
+                {totalExpenses} ₽
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.card}>
+          <div className={styles.statsCard}>
+            <div className={`${styles.iconWrapper} ${styles.iconWrapperGreen}`}>
+              <Target className={`${styles.icon} ${styles.iconGreen}`} />
+            </div>
+            <div className={styles.statsContent}>
+              <p className={styles.statsLabel}>До цели</p>
+              <p className={`${styles.statsValue} ${styles.valueGreen}`}>
+                {calculateAmountToGoal().toLocaleString()} ₽
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -212,6 +313,44 @@ const Dashboard = () => {
           ) : (
             <p>Транзакции не найдены</p>
           )}
+        </div>
+      </div>
+      <div className={styles.card}>
+        <h2 className={styles.title}>Динамика за последние 7 дней</h2>
+        <div className={styles.chartContainer}>
+          <LineChart
+            width={800}
+            height={300}
+            data={chartData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+            <YAxis
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) => `${value.toLocaleString()} ₽`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="expenses"
+              stroke="#ef4444"
+              name="Расходы"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="income"
+              stroke="#22c55e"
+              name="Доходы"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
         </div>
       </div>
       <div className={styles.goalsCard}>
