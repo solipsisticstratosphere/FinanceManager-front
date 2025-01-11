@@ -3,7 +3,10 @@
   max-width: 72rem;
   margin: 0 auto;
 }
-
+.chartContainer {
+  width: 100%;
+  height: 300px;
+}
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -21,11 +24,85 @@
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.statsCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.iconWrapper {
+  padding: 0.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iconWrapperBlue {
+  background-color: #dbeafe;
+}
+
+.iconWrapperRed {
+  background-color: #fee2e2;
+}
+
+.iconWrapperGreen {
+  background-color: #dcfce7;
+}
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.iconBlue {
+  color: #2563eb;
+}
+
+.iconRed {
+  color: #dc2626;
+}
+
+.iconGreen {
+  color: #16a34a;
+}
+
+.statsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.statsLabel {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.statsValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
 
 .title {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+}
+
+.tooltip {
+  background-color: white;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.tooltipText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.tooltipEntry {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
 }
 
 .value {
