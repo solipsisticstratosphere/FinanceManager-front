@@ -1,20 +1,24 @@
 import { Navigate, Routes, Route } from "react-router-dom";
-import LandingPage from "../../pages/LandingPage/LandingPage";
-import PublicRoute from "../../routes/PublicRoute";
-import PrivateRoute from "../../routes/PrivateRoute";
-import MainPage from "../../pages/MainPage/MainPage";
-import PublicRegisterRoute from "../../routes/PublicRegisterRoute";
-import SignupPage from "../../pages/SignUpPage/SignupPage";
-import SinginPage from "../../pages/SignInPage/SigninPage";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectIsLoggedIn,
-  selectIsRefreshing,
-  selectIsRegistered,
-} from "../../redux/auth/selectors";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, lazy } from "react";
 import { refreshUser } from "../../redux/auth/operations";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import Layout from "../Layout/Layout";
+import PublicRoute from "../../routes/PublicRoute";
+import PrivateRoute from "../../routes/PrivateRoute";
+import PublicRegisterRoute from "../../routes/PublicRegisterRoute";
+
+// Lazy load components
+const LandingPage = lazy(() => import("../../pages/LandingPage/LandingPage"));
+const SignupPage = lazy(() => import("../../pages/SignUpPage/SignupPage"));
+const SinginPage = lazy(() => import("../../pages/SignInPage/SigninPage"));
+const MainPage = lazy(() => import("../../pages/MainPage/MainPage"));
+const GoalsPage = lazy(() => import("../../pages/GoalsPage/GoalsPage"));
+const TransactionsPage = lazy(() =>
+  import("../../pages/TransactionsPage/TransactionsPage")
+);
+// const Analytics = lazy(() => import("../../pages/Analytics/Analytics"));
+// const Settings = lazy(() => import("../../pages/Settings/Settings"));
 
 export default function App() {
   const dispatch = useDispatch();
@@ -33,20 +37,25 @@ export default function App() {
         <Route
           path="/landing"
           element={
-            <PublicRoute component={<LandingPage />} redirectTo="/home" />
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute component={<MainPage />} redirectTo="/signin" />
+            <PublicRoute
+              component={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <LandingPage />
+                </Suspense>
+              }
+              redirectTo="/home"
+            />
           }
         />
         <Route
           path="/signup"
           element={
             <PublicRegisterRoute
-              component={<SignupPage />}
+              component={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <SignupPage />
+                </Suspense>
+              }
               redirectTo="/signin"
             />
           }
@@ -54,9 +63,61 @@ export default function App() {
         <Route
           path="/signin"
           element={
-            <PublicRoute component={<SinginPage />} redirectTo="/home" />
+            <PublicRoute
+              component={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <SinginPage />
+                </Suspense>
+              }
+              redirectTo="/home"
+            />
           }
         />
+        <Route
+          path="/"
+          element={<PrivateRoute component={<Layout />} redirectTo="/signin" />}
+        >
+          <Route
+            path="home"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <MainPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="goals"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <GoalsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="transactions"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <TransactionsPage />
+              </Suspense>
+            }
+          />
+          {/* <Route
+            path="analytics"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <Analytics />
+              </Suspense>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <Settings />
+              </Suspense>
+            }
+          /> */}
+        </Route>
       </Routes>
     </Suspense>
   );
