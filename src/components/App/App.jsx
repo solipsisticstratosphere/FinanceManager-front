@@ -17,7 +17,9 @@ const GoalsPage = lazy(() => import("../../pages/GoalsPage/GoalsPage"));
 const TransactionsPage = lazy(() =>
   import("../../pages/TransactionsPage/TransactionsPage")
 );
-// const Analytics = lazy(() => import("../../pages/Analytics/Analytics"));
+const AnalyticsPage = lazy(() =>
+  import("../../pages/AnalyticsPage/AnalyticsPage")
+);
 // const Settings = lazy(() => import("../../pages/Settings/Settings"));
 
 export default function App() {
@@ -101,15 +103,15 @@ export default function App() {
               </Suspense>
             }
           />
-          {/* <Route
+          <Route
             path="analytics"
             element={
               <Suspense fallback={<LoadingSpinner />}>
-                <Analytics />
+                <AnalyticsPage />
               </Suspense>
             }
           />
-          <Route
+          {/* <Route
             path="settings"
             element={
               <Suspense fallback={<LoadingSpinner />}>
