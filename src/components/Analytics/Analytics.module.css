@@ -1,0 +1,40 @@
+.container {
+  padding: 1.5rem;
+  max-width: 96rem;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.chartContainer {
+  height: 400px;
+  width: 100%;
+}
+
+.tooltip {
+  background-color: white;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  font-weight: 500;
+}
+
+.value {
+  color: #2563eb;
+}
