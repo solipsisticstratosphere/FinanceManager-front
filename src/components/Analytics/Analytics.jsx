@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { selectTransactions } from "../../redux/transactions/selectors";
 import styles from "./Analytics.module.css";
+import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 
 const Analytics = () => {
   const transactions = useSelector(selectTransactions);
@@ -38,7 +39,9 @@ const Analytics = () => {
       return (
         <div className={styles.tooltip}>
           <p className={styles.label}>{label}</p>
-          <p className={styles.value}>{payload[0].value.toLocaleString()} ₽</p>
+          <p className={styles.value}>
+            <CurrencyDisplay amount={payload[0].value.toLocaleString()} />
+          </p>
         </div>
       );
     }
