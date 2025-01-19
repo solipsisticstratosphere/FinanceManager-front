@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { clearAuthState } from "./slice";
 axios.defaults.baseURL = "https://financemanager-back.onrender.com/";
 axios.defaults.withCredentials = true;
 
@@ -72,6 +72,30 @@ export const refreshUser = createAsyncThunk(
       return data.data;
     } catch (error) {
       clearAuthHeader();
+      if (error.response?.status === 401) {
+        thunkAPI.dispatch(clearAuthState());
+      }
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState();
+      return !state.auth.isRefreshing;
+    },
+  }
+);
+
+export const updateUserSettings = createAsyncThunk(
+  "auth/updateSettings",
+  async (updateData, thunkAPI) => {
+    try {
+      const { data } = await axios.patch("/users/settings", updateData);
+      return data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
       return thunkAPI.rejectWithValue(error.message);
     }
   }

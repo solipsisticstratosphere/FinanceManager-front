@@ -28,12 +28,14 @@ import {
   YAxis,
 } from "recharts";
 import { DollarSign, Target, TrendingDown } from "lucide-react";
+import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
+import { selectUserName } from "../../redux/auth/selectors";
 
 const Dashboard = () => {
   const [newBalance, setNewBalance] = useState("");
 
   const transactions = useSelector(selectTransactions);
-
+  const userName = useSelector(selectUserName);
   const totalExpenses = useSelector(selectTotalExpenses);
   const balance = useSelector(selectBalance);
   const isLoading = useSelector(selectLoadingBalance);
@@ -114,7 +116,7 @@ const Dashboard = () => {
               className={styles.tooltipEntry}
               style={{ color: entry.color }}
             >
-              {entry.name}: {entry.value.toLocaleString()} ₽
+              {entry.name}: <CurrencyDisplay amount={entry.value} />
             </p>
           ))}
         </div>
@@ -125,6 +127,10 @@ const Dashboard = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Привіт, {userName}</h1>
+      </div>
+      {/* создать развилку если нет имени то с ссылкой на настройки где можно установить */}
       <div className={styles.grid}>
         <div className={styles.card}>
           <div className={styles.statsCard}>
@@ -134,7 +140,11 @@ const Dashboard = () => {
             <div className={styles.statsContent}>
               <p className={styles.statsLabel}>Баланс</p>
               <p className={styles.statsValue}>
-                {isLoading ? "Загрузка..." : `${balance} ₽`}
+                {isLoading ? (
+                  "Загрузка..."
+                ) : (
+                  <CurrencyDisplay amount={balance} />
+                )}
               </p>
             </div>
           </div>
@@ -165,7 +175,7 @@ const Dashboard = () => {
             <div className={styles.statsContent}>
               <p className={styles.statsLabel}>Расходы</p>
               <p className={`${styles.statsValue} ${styles.valueRed}`}>
-                {totalExpenses} ₽
+                <CurrencyDisplay amount={totalExpenses} />
               </p>
             </div>
           </div>
@@ -179,13 +189,14 @@ const Dashboard = () => {
             <div className={styles.statsContent}>
               <p className={styles.statsLabel}>До цели</p>
               <p className={`${styles.statsValue} ${styles.valueGreen}`}>
-                {calculateAmountToGoal().toLocaleString()} ₽
+                <CurrencyDisplay
+                  amount={calculateAmountToGoal().toLocaleString()}
+                />
               </p>
             </div>
           </div>
         </div>
       </div>
-
       <div className={styles.card}>
         <h2 className={styles.title}>Динамика за последние 7 дней</h2>
         <div className={styles.chartContainer}>
@@ -199,7 +210,7 @@ const Dashboard = () => {
             <XAxis dataKey="date" tick={{ fontSize: 12 }} />
             <YAxis
               tick={{ fontSize: 12 }}
-              tickFormatter={(value) => `${value.toLocaleString()} ₽`}
+              tickFormatter={(value) => `${value.toLocaleString()}`}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />

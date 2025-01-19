@@ -15,6 +15,7 @@ import {
   selectGoalsLoading,
 } from "../../redux/goals/selectrors";
 import styles from "./Goals.module.css";
+import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 
 const Goals = () => {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
@@ -102,7 +103,8 @@ const Goals = () => {
                   />
                 </div>
                 <p className={styles.goalAmount}>
-                  {goal.currentAmount} ₽ / {goal.targetAmount} ₽
+                  <CurrencyDisplay amount={goal.currentAmount} /> /{" "}
+                  <CurrencyDisplay amount={goal.targetAmount} />
                 </p>
                 <p className={styles.goalDeadline}>
                   До: {new Date(goal.deadline).toLocaleDateString()}

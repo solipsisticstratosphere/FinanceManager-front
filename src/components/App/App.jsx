@@ -20,17 +20,19 @@ const TransactionsPage = lazy(() =>
 const AnalyticsPage = lazy(() =>
   import("../../pages/AnalyticsPage/AnalyticsPage")
 );
-// const Settings = lazy(() => import("../../pages/Settings/Settings"));
+const SettingsPage = lazy(() =>
+  import("../../pages/SettingsPage/SettingsPage")
+);
 
 export default function App() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
-
+  const failedRefresh = useSelector((state) => state.auth.failedRefresh);
   useEffect(() => {
-    if (token) {
+    if (token && !failedRefresh) {
       dispatch(refreshUser());
     }
-  }, [dispatch, token]);
+  }, [dispatch, token, failedRefresh]);
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
@@ -111,14 +113,14 @@ export default function App() {
               </Suspense>
             }
           />
-          {/* <Route
+          <Route
             path="settings"
             element={
               <Suspense fallback={<LoadingSpinner />}>
-                <Settings />
+                <SettingsPage />
               </Suspense>
             }
-          /> */}
+          />
         </Route>
       </Routes>
     </Suspense>

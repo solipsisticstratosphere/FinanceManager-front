@@ -1,11 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { logIn, logout, refreshUser, register } from "./operations";
+import {
+  logIn,
+  logout,
+  refreshUser,
+  register,
+  updateUserSettings,
+} from "./operations";
 
 const initialState = {
   user: {
     name: null,
     email: null,
     avatarUrl: null,
+    currency: "UAH",
   },
   token: null,
   isLoggedIn: false,
@@ -13,11 +20,22 @@ const initialState = {
   isLoading: false,
   error: null,
   isRegistered: false,
+  failedRefresh: false,
 };
 
 const slice = createSlice({
   name: "auth",
   initialState,
+  reducers: {
+    clearAuthState: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isLoggedIn = false;
+      state.isRefreshing = false;
+      state.error = null;
+      state.failedRefresh = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       //Register
@@ -68,6 +86,7 @@ const slice = createSlice({
         state.user = action.payload;
         state.isLoggedIn = true;
         state.isRefreshing = false;
+        state.failedRefresh = false;
         state.error = null;
       })
       .addCase(refreshUser.rejected, (state, action) => {
@@ -75,9 +94,23 @@ const slice = createSlice({
         state.token = null;
         state.isLoggedIn = false;
         state.isRefreshing = false;
+        state.failedRefresh = true;
         state.error = action.payload;
+      })
+      .addCase(updateUserSettings.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUserSettings.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.user = payload;
+        state.error = null;
+      })
+      .addCase(updateUserSettings.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.error = payload;
       });
   },
 });
-
+export const { clearAuthState } = slice.actions;
 export const authReducer = slice.reducer;

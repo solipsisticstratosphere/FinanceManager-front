@@ -10,6 +10,7 @@ import TransactionModal from "../TransactionModal/TransactionModal";
 import { selectBalance } from "../../redux/balance/selectors";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import styles from "./Transactions.module.css";
+import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 
 const Transactions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,7 +84,7 @@ const Transactions = () => {
                       `}
                   >
                     {transaction.type === "expense" ? "-" : "+"}
-                    {transaction.amount} ₽
+                    <CurrencyDisplay amount={transaction.amount} />
                   </p>
                   <p className={styles.transactionDate}>
                     {new Date(transaction.date).toLocaleDateString()}
