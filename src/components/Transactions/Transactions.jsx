@@ -11,6 +11,7 @@ import { selectBalance } from "../../redux/balance/selectors";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import styles from "./Transactions.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
+import { fetchBalance } from "../../redux/balance/operations";
 
 const Transactions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,19 +23,39 @@ const Transactions = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchTransactions());
+    // Загружаем и транзакции, и баланс при монтировании компонента
+    const initializeData = async () => {
+      try {
+        await Promise.all([
+          dispatch(fetchTransactions()),
+          dispatch(fetchBalance()),
+        ]);
+      } catch (error) {
+        console.error("Error initializing data:", error);
+      }
+    };
+
+    initializeData();
   }, [dispatch]);
 
+  // Добавим проверку на готовность баланса
+  const handleOpenModal = () => {
+    if (balance !== undefined) {
+      setIsModalOpen(true);
+    } else {
+      // Если баланс еще не загружен, сначала загрузим его
+      dispatch(fetchBalance()).then(() => {
+        setIsModalOpen(true);
+      });
+    }
+  };
   return (
     <>
       <div className={styles.transactionsCard}>
         <div className={styles.transactionsHeader}>
-          <h2 className={styles.transactionsTitle}>Транзакции</h2>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className={styles.addButton}
-          >
-            Добавить
+          <h2 className={styles.transactionsTitle}>Транзакції</h2>
+          <button onClick={handleOpenModal} className={styles.addButton}>
+            Додати
           </button>
         </div>
         <div className={styles.transactionsList}>

@@ -33,6 +33,7 @@ import { selectUserName } from "../../redux/auth/selectors";
 
 const Dashboard = () => {
   const [newBalance, setNewBalance] = useState("");
+  const [timeRange, setTimeRange] = useState("7d"); // Додаємо стан для періоду
 
   const transactions = useSelector(selectTransactions);
   const userName = useSelector(selectUserName);
@@ -63,17 +64,34 @@ const Dashboard = () => {
       .catch((err) => console.error("Failed to update balance:", err));
   };
 
+  const getDateRangeLimit = () => {
+    const now = new Date();
+    switch (timeRange) {
+      case "7d":
+        return new Date(now.setDate(now.getDate() - 7));
+      case "1m":
+        return new Date(now.setMonth(now.getMonth() - 1));
+      case "6m":
+        return new Date(now.setMonth(now.getMonth() - 6));
+      case "1y":
+        return new Date(now.setFullYear(now.getFullYear() - 1));
+      default:
+        return new Date(now.setDate(now.getDate() - 7));
+    }
+  };
+
   const processTransactionsForChart = () => {
     if (!transactions?.length) return [];
 
     const dailyTotals = new Map();
+    const dateLimit = getDateRangeLimit();
 
-    const sortedTransactions = [...transactions].sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
-    );
+    const sortedTransactions = [...transactions]
+      .filter((transaction) => new Date(transaction.date) >= dateLimit)
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
 
     sortedTransactions.forEach((transaction) => {
-      const date = new Date(transaction.date).toLocaleDateString("ru-RU");
+      const date = new Date(transaction.date).toLocaleDateString("uk-UA");
 
       if (!dailyTotals.has(date)) {
         dailyTotals.set(date, {
@@ -91,10 +109,9 @@ const Dashboard = () => {
       }
     });
 
-    // Convert map to array and sort by date
-    return Array.from(dailyTotals.values())
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
-      .slice(-7); // Get last 7 days
+    return Array.from(dailyTotals.values()).sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
   };
 
   const calculateAmountToGoal = () => {
@@ -104,7 +121,6 @@ const Dashboard = () => {
 
   const chartData = processTransactionsForChart();
 
-  // Custom tooltip formatter for the chart
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -125,12 +141,18 @@ const Dashboard = () => {
     return null;
   };
 
+  const timeRangeButtons = [
+    { value: "7d", label: "7 днів" },
+    { value: "1m", label: "1 місяць" },
+    { value: "6m", label: "6 місяців" },
+    { value: "1y", label: "1 рік" },
+  ];
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Привіт, {userName}</h1>
       </div>
-      {/* создать развилку если нет имени то с ссылкой на настройки где можно установить */}
       <div className={styles.grid}>
         <div className={styles.card}>
           <div className={styles.statsCard}>
@@ -141,7 +163,7 @@ const Dashboard = () => {
               <p className={styles.statsLabel}>Баланс</p>
               <p className={styles.statsValue}>
                 {isLoading ? (
-                  "Загрузка..."
+                  "Завантаження..."
                 ) : (
                   <CurrencyDisplay amount={balance} />
                 )}
@@ -154,7 +176,7 @@ const Dashboard = () => {
               value={newBalance}
               onChange={(e) => setNewBalance(e.target.value)}
               className={styles.input}
-              placeholder="Новый баланс"
+              placeholder="Новий баланс"
               disabled={isLoading}
             />
             <button
@@ -162,7 +184,7 @@ const Dashboard = () => {
               className={styles.button}
               disabled={isLoading || !newBalance}
             >
-              {isLoading ? "Обновление..." : "Обновить баланс"}
+              {isLoading ? "Оновлення..." : "Оновити баланс"}
             </button>
           </div>
         </div>
@@ -173,7 +195,7 @@ const Dashboard = () => {
               <TrendingDown className={`${styles.icon} ${styles.iconRed}`} />
             </div>
             <div className={styles.statsContent}>
-              <p className={styles.statsLabel}>Расходы</p>
+              <p className={styles.statsLabel}>Витрати</p>
               <p className={`${styles.statsValue} ${styles.valueRed}`}>
                 <CurrencyDisplay amount={totalExpenses} />
               </p>
@@ -187,18 +209,35 @@ const Dashboard = () => {
               <Target className={`${styles.icon} ${styles.iconGreen}`} />
             </div>
             <div className={styles.statsContent}>
-              <p className={styles.statsLabel}>До цели</p>
+              <p className={styles.statsLabel}>До цілі</p>
               <p className={`${styles.statsValue} ${styles.valueGreen}`}>
-                <CurrencyDisplay
-                  amount={calculateAmountToGoal().toLocaleString()}
-                />
+                {activeGoal ? (
+                  <CurrencyDisplay amount={calculateAmountToGoal()} />
+                ) : (
+                  <p className={styles.statsValue}>Ціль не обрана</p>
+                )}
               </p>
             </div>
           </div>
         </div>
       </div>
       <div className={styles.card}>
-        <h2 className={styles.title}>Динамика за последние 7 дней</h2>
+        <div className={styles.chartHeader}>
+          <h2 className={styles.title}>Динаміка за період</h2>
+          <div className={styles.timeRangeButtons}>
+            {timeRangeButtons.map((button) => (
+              <button
+                key={button.value}
+                onClick={() => setTimeRange(button.value)}
+                className={`${styles.timeRangeButton} ${
+                  timeRange === button.value ? styles.timeRangeButtonActive : ""
+                }`}
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className={styles.chartContainer}>
           <LineChart
             width={800}
@@ -218,7 +257,7 @@ const Dashboard = () => {
               type="monotone"
               dataKey="expenses"
               stroke="#ef4444"
-              name="Расходы"
+              name="Витрати"
               strokeWidth={2}
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}
@@ -227,7 +266,7 @@ const Dashboard = () => {
               type="monotone"
               dataKey="income"
               stroke="#22c55e"
-              name="Доходы"
+              name="Доходи"
               strokeWidth={2}
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}

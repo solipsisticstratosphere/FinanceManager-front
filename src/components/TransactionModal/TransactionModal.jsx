@@ -1,12 +1,17 @@
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "./TransactionModal.module.css";
 import { addTransaction } from "../../redux/transactions/operations";
+import { deactivateGoal } from "../../redux/goals/operations";
+import toast from "react-hot-toast";
+import { selectActiveGoal } from "../../redux/goals/selectrors";
+import { useState } from "react";
 
 const TransactionModal = ({ onClose, currentBalance }) => {
   const dispatch = useDispatch();
+  const activeGoal = useSelector(selectActiveGoal);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const validationSchema = Yup.object({
     type: Yup.string().required("Виберіть тип транзакції"),
@@ -14,7 +19,9 @@ const TransactionModal = ({ onClose, currentBalance }) => {
       .required("Введіть суму")
       .positive("Сума повинна бути більше нуля")
       .test("check-balance", "Недостатньо коштів", function (value) {
-        return this.parent.type === "income" || value <= currentBalance;
+        const numericValue = Number(value);
+        const numericBalance = Number(currentBalance);
+        return this.parent.type === "income" || numericValue <= numericBalance;
       }),
     category: Yup.string().required("Оберіть категорію"),
     description: Yup.string(),
@@ -29,8 +36,11 @@ const TransactionModal = ({ onClose, currentBalance }) => {
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting, setErrors }) => {
+      setIsProcessing(true);
       try {
-        await dispatch(
+        const initialGoalAmount = activeGoal?.currentAmount || 0;
+
+        const result = await dispatch(
           addTransaction({
             type: values.type,
             amount: Number(values.amount),
@@ -38,8 +48,33 @@ const TransactionModal = ({ onClose, currentBalance }) => {
             description: values.description,
           })
         ).unwrap();
+
+        if (values.type === "income" && activeGoal) {
+          const newAmount = initialGoalAmount + Number(values.amount);
+
+          if (newAmount >= activeGoal.targetAmount) {
+            toast.success(`🎉 Вітаємо! Ціль "${activeGoal.title}" досягнуто!`, {
+              duration: 4000,
+              position: "top-center",
+              style: {
+                backgroundColor: "#4CAF50",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "16px",
+                padding: "16px 24px",
+                borderRadius: "8px",
+              },
+            });
+
+            await dispatch(deactivateGoal(activeGoal._id));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+
+        setIsProcessing(false);
         onClose();
       } catch (err) {
+        setIsProcessing(false);
         setErrors({ submit: err.message || "Сталася помилка" });
       } finally {
         setSubmitting(false);
@@ -47,18 +82,30 @@ const TransactionModal = ({ onClose, currentBalance }) => {
     },
   });
 
+  const handleClose = (e) => {
+    if (e.target.className.includes(styles.modalOverlay)) {
+      if (!isProcessing) {
+        onClose();
+      }
+    }
+  };
+
   return (
-    <div className={styles.modalBackdrop}>
-      <div className={styles.modalContainer}>
+    <div className={styles.modalOverlay} onClick={handleClose}>
+      <div className={styles.modalContent}>
         <h2 className={styles.modalTitle}>Додати транзакцію</h2>
 
         {formik.errors.submit && (
           <div className={styles.errorMessage}>{formik.errors.submit}</div>
         )}
 
-        <form onSubmit={formik.handleSubmit}>
-          <div className={styles.fieldGroup}>
-            <label className={styles.radioLabel}>
+        <form onSubmit={formik.handleSubmit} className={styles.form}>
+          <div className={styles.radioGroup}>
+            <label
+              className={`${styles.radioLabel} ${
+                formik.values.type === "expense" ? styles.radioLabelActive : ""
+              }`}
+            >
               <input
                 type="radio"
                 name="type"
@@ -69,7 +116,11 @@ const TransactionModal = ({ onClose, currentBalance }) => {
               />
               Витрати
             </label>
-            <label className={styles.radioLabel}>
+            <label
+              className={`${styles.radioLabel} ${
+                formik.values.type === "income" ? styles.radioLabelActive : ""
+              }`}
+            >
               <input
                 type="radio"
                 name="type"
@@ -82,26 +133,34 @@ const TransactionModal = ({ onClose, currentBalance }) => {
             </label>
           </div>
 
-          <div className={styles.fieldGroup}>
+          <div className={styles.formGroup}>
             <input
               type="number"
               name="amount"
               value={formik.values.amount}
               onChange={formik.handleChange}
               placeholder="Сума"
-              className={styles.input}
+              className={`${styles.input} ${
+                formik.errors.amount && formik.touched.amount
+                  ? styles.inputError
+                  : ""
+              }`}
             />
             {formik.errors.amount && formik.touched.amount && (
               <div className={styles.errorMessage}>{formik.errors.amount}</div>
             )}
           </div>
 
-          <div className={styles.fieldGroup}>
+          <div className={styles.formGroup}>
             <select
               name="category"
               value={formik.values.category}
               onChange={formik.handleChange}
-              className={styles.select}
+              className={`${styles.select} ${
+                formik.errors.category && formik.touched.category
+                  ? styles.inputError
+                  : ""
+              }`}
             >
               <option value="">Оберіть категорію</option>
               {formik.values.type === "expense" ? (
@@ -109,7 +168,7 @@ const TransactionModal = ({ onClose, currentBalance }) => {
                   <option value="Продукти">Продукти</option>
                   <option value="Транспорт">Транспорт</option>
                   <option value="Розваги">Розваги</option>
-                  <option value="Комунальні">Комунальні платежі</option>
+                  <option value="Комунальні платежі">Комунальні платежі</option>
                 </>
               ) : (
                 <>
@@ -127,7 +186,7 @@ const TransactionModal = ({ onClose, currentBalance }) => {
             )}
           </div>
 
-          <div className={styles.fieldGroup}>
+          <div className={styles.formGroup}>
             <input
               type="text"
               name="description"
@@ -138,20 +197,23 @@ const TransactionModal = ({ onClose, currentBalance }) => {
             />
           </div>
 
-          <div className={styles.buttonGroup}>
+          <div className={styles.modalActions}>
+            <button
+              type="submit"
+              disabled={formik.isSubmitting || isProcessing}
+              className={`${styles.primaryButton} ${
+                formik.isSubmitting || isProcessing ? styles.buttonDisabled : ""
+              }`}
+            >
+              {isProcessing ? "Обробка..." : "Додати"}
+            </button>
             <button
               type="button"
               onClick={onClose}
-              className={styles.cancelButton}
+              disabled={isProcessing}
+              className={styles.secondaryButton}
             >
-              Відміна
-            </button>
-            <button
-              type="submit"
-              disabled={formik.isSubmitting}
-              className={styles.submitButton}
-            >
-              Додати
+              Скасувати
             </button>
           </div>
         </form>

@@ -7,6 +7,40 @@
   width: 100%;
   height: 300px;
 }
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.timeRangeButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.timeRangeButton {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.timeRangeButton:hover {
+  background: #f1f5f9;
+}
+
+.timeRangeButtonActive {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.timeRangeButtonActive:hover {
+  background: #2563eb;
+}
 .grid {
   display: grid;
   grid-template-columns: 1fr;
