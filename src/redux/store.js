@@ -34,6 +34,7 @@ export const store = configureStore({
         ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+  devTools: process.env.NODE_ENV !== "production", // Включает DevTools только в разработке
 });
 
 export const persistor = persistStore(store);

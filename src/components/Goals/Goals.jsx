@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import {
   createGoal,
   deactivateGoal,
@@ -17,13 +19,22 @@ import {
 import styles from "./Goals.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 
+// Validation schema
+const GoalSchema = Yup.object().shape({
+  title: Yup.string()
+    .min(2, "Назва цілі занадто коротка")
+    .max(50, "Назва цілі занадто довга")
+    .required("Обов'язкове поле"),
+  targetAmount: Yup.number()
+    .positive("Сума має бути більше 0")
+    .required("Обов'язкове поле"),
+  deadline: Yup.date()
+    .min(new Date(), "Дата не може бути в минулому")
+    .required("Обов'язкове поле"),
+});
+
 const Goals = () => {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
-  const [newGoal, setNewGoal] = useState({
-    title: "",
-    targetAmount: "",
-    deadline: "",
-  });
 
   const goals = useSelector(selectGoals);
   const activeGoal = useSelector(selectActiveGoal);
@@ -37,16 +48,14 @@ const Goals = () => {
     dispatch(fetchGoals());
   }, [dispatch]);
 
-  const handleCreateGoal = () => {
-    if (!newGoal.title || !newGoal.targetAmount || !newGoal.deadline) return;
-
-    dispatch(createGoal(newGoal))
+  const handleCreateGoal = (values, { resetForm }) => {
+    dispatch(createGoal(values))
       .unwrap()
       .then(() => {
         setIsGoalModalOpen(false);
-        setNewGoal({ title: "", targetAmount: "", deadline: "" });
+        resetForm();
       })
-      .catch((err) => console.error("Failed to create goal:", err));
+      .catch((err) => console.error("Не вдалося створити ціль:", err));
   };
 
   const handleGoalAction = (goalId, action) => {
@@ -65,23 +74,29 @@ const Goals = () => {
     }
   };
 
+  const handleModalClose = useCallback((e) => {
+    if (e.target.className === styles.modalOverlay) {
+      setIsGoalModalOpen(false);
+    }
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Мои цели</h2>
+        <h2 className={styles.title}>Мої цілі</h2>
         <button
           onClick={() => setIsGoalModalOpen(true)}
           className={styles.addButton}
         >
-          Добавить цель
+          Додати ціль
         </button>
       </div>
 
       <div className={styles.goalsList}>
         {isLoadingGoals ? (
-          <p className={styles.message}>Загрузка целей...</p>
+          <p className={styles.message}>Завантаження цілей...</p>
         ) : goalsError ? (
-          <p className={styles.error}>Ошибка: {goalsError}</p>
+          <p className={styles.error}>Помилка: {goalsError}</p>
         ) : goals && goals.length > 0 ? (
           goals.map((goal) => (
             <div
@@ -116,74 +131,118 @@ const Goals = () => {
                     onClick={() => handleGoalAction(goal._id, "activate")}
                     className={styles.activateButton}
                   >
-                    Активировать
+                    Активувати
                   </button>
                 ) : (
                   <button
                     onClick={() => handleGoalAction(goal._id, "deactivate")}
                     className={styles.deactivateButton}
                   >
-                    Деактивировать
+                    Деактивувати
                   </button>
                 )}
                 <button
                   onClick={() => handleGoalAction(goal._id, "delete")}
                   className={styles.deleteButton}
                 >
-                  Удалить
+                  Видалити
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <p className={styles.message}>Цели не найдены</p>
+          <p className={styles.message}>Цілі не знайдено</p>
         )}
       </div>
 
       {isGoalModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h2 className={styles.modalTitle}>Новая цель</h2>
-            <input
-              type="text"
-              placeholder="Название цели"
-              value={newGoal.title}
-              onChange={(e) =>
-                setNewGoal({ ...newGoal, title: e.target.value })
-              }
-              className={styles.input}
-            />
-            <input
-              type="number"
-              placeholder="Сумма цели"
-              value={newGoal.targetAmount}
-              onChange={(e) =>
-                setNewGoal({ ...newGoal, targetAmount: e.target.value })
-              }
-              className={styles.input}
-            />
-            <input
-              type="date"
-              value={newGoal.deadline}
-              onChange={(e) =>
-                setNewGoal({ ...newGoal, deadline: e.target.value })
-              }
-              className={styles.input}
-            />
-            <div className={styles.modalActions}>
-              <button
-                onClick={handleCreateGoal}
-                className={styles.primaryButton}
-              >
-                Создать
-              </button>
-              <button
-                onClick={() => setIsGoalModalOpen(false)}
-                className={styles.secondaryButton}
-              >
-                Отмена
-              </button>
-            </div>
+        <div className={styles.modalOverlay} onClick={handleModalClose}>
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className={styles.modalTitle}>Нова ціль</h2>
+            <Formik
+              initialValues={{
+                title: "",
+                targetAmount: "",
+                deadline: "",
+              }}
+              validationSchema={GoalSchema}
+              onSubmit={handleCreateGoal}
+            >
+              {({ errors, touched, isValid, dirty }) => (
+                <Form className={styles.form}>
+                  <div className={styles.formGroup}>
+                    <Field
+                      name="title"
+                      type="text"
+                      placeholder="Назва цілі"
+                      className={`${styles.input} ${
+                        errors.title && touched.title ? styles.inputError : ""
+                      }`}
+                    />
+                    {errors.title && touched.title && (
+                      <div className={styles.errorMessage}>{errors.title}</div>
+                    )}
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <Field
+                      name="targetAmount"
+                      type="number"
+                      placeholder="Сума цілі"
+                      className={`${styles.input} ${
+                        errors.targetAmount && touched.targetAmount
+                          ? styles.inputError
+                          : ""
+                      }`}
+                    />
+                    {errors.targetAmount && touched.targetAmount && (
+                      <div className={styles.errorMessage}>
+                        {errors.targetAmount}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <Field
+                      name="deadline"
+                      type="date"
+                      className={`${styles.input} ${
+                        errors.deadline && touched.deadline
+                          ? styles.inputError
+                          : ""
+                      }`}
+                    />
+                    {errors.deadline && touched.deadline && (
+                      <div className={styles.errorMessage}>
+                        {errors.deadline}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className={styles.modalActions}>
+                    <button
+                      type="submit"
+                      className={`${styles.primaryButton} ${
+                        !(isValid && dirty) ? styles.buttonDisabled : ""
+                      }`}
+                      disabled={!(isValid && dirty)}
+                    >
+                      Створити
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsGoalModalOpen(false)}
+                      className={styles.secondaryButton}
+                    >
+                      Скасувати
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       )}

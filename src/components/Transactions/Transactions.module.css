@@ -1,108 +1,149 @@
 .transactionsCard {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 28px;
   max-width: 800px;
   margin: 0 auto;
+  transition: box-shadow 0.3s ease;
+}
+
+.transactionsCard:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .transactionsHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
 }
 
 .transactionsTitle {
   font-size: 24px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: 1px;
 }
 
 .addButton {
   background: #4f46e5;
   color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .addButton:hover {
   background: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.addButton:active {
+  transform: translateY(0);
 }
 
 .transactionsList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .transactionItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
   background: #f9fafb;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .transactionItem:hover {
-  background: #f3f4f6;
+  background: #ffffff;
+  border-color: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .transactionContent {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  flex: 1;
 }
 
 .iconWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.expense .iconWrapper {
+  background: #fef2f2;
+}
+
+.income .iconWrapper {
+  background: #f0fdf4;
 }
 
 .expenseIcon {
   color: #dc2626;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .incomeIcon {
   color: #16a34a;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .transactionCategory {
-  font-weight: 500;
-  color: #1a1a1a;
+  font-weight: 600;
+  color: #111827;
   margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
 .transactionDescription {
   color: #6b7280;
   font-size: 14px;
   margin: 4px 0 0 0;
+  line-height: 1.4;
 }
 
 .transactionDetails {
   text-align: right;
+  min-width: 120px;
 }
 
 .transactionAmount {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 16px;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
 }
 
 .amountRed {
@@ -115,6 +156,30 @@
 
 .transactionDate {
   color: #6b7280;
-  font-size: 14px;
+  font-size: 13px;
   margin: 4px 0 0 0;
+}
+
+@media (max-width: 640px) {
+  .transactionsCard {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .transactionItem {
+    padding: 16px;
+  }
+
+  .iconWrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .transactionCategory {
+    font-size: 15px;
+  }
+
+  .transactionAmount {
+    font-size: 15px;
+  }
 }
