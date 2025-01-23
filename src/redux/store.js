@@ -14,6 +14,7 @@ import storage from "redux-persist/lib/storage";
 import { balanceReducer } from "./balance/slice";
 import { transactionsReducer } from "./transactions/slice";
 import { goalsReducer } from "./goals/slice";
+import { forecastsReducer } from "./forecasts/slice";
 
 const authPersistConfig = {
   key: "auth",
@@ -27,6 +28,7 @@ export const store = configureStore({
     balance: balanceReducer,
     transactions: transactionsReducer,
     goals: goalsReducer,
+    forecasts: forecastsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -34,7 +36,7 @@ export const store = configureStore({
         ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  devTools: process.env.NODE_ENV !== "production", // Включает DevTools только в разработке
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export const persistor = persistStore(store);
