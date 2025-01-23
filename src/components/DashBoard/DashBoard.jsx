@@ -27,13 +27,29 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { DollarSign, Target, TrendingDown } from "lucide-react";
+import {
+  Calculator,
+  DollarSign,
+  Target,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 import { selectUserName } from "../../redux/auth/selectors";
+import {
+  selectBudgetForecast,
+  selectForecastsLoading,
+  selectGoalForecast,
+} from "../../redux/forecasts/selectors";
+import {
+  calculateBudgetForecast,
+  calculateGoalForecast,
+} from "../../redux/forecasts/operations";
 
 const Dashboard = () => {
   const [newBalance, setNewBalance] = useState("");
   const [timeRange, setTimeRange] = useState("7d"); // Додаємо стан для періоду
+  const [showForecast, setShowForecast] = useState(false);
 
   const transactions = useSelector(selectTransactions);
   const userName = useSelector(selectUserName);
@@ -41,6 +57,9 @@ const Dashboard = () => {
   const balance = useSelector(selectBalance);
   const isLoading = useSelector(selectLoadingBalance);
   const error = useSelector(selectErrorBalance);
+  const budgetForecast = useSelector(selectBudgetForecast);
+  const goalForecast = useSelector(selectGoalForecast);
+  const forecastsLoading = useSelector(selectForecastsLoading);
 
   const activeGoal = useSelector(selectActiveGoal);
 
@@ -49,11 +68,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchGoals());
-    console.log("Dashboard mounted, dispatching fetch actions");
-    dispatch(fetchTransactions()).then((result) => {
-      console.log("Fetch transactions result:", result);
-    });
+    dispatch(fetchTransactions());
     dispatch(fetchBalance());
+    dispatch(calculateBudgetForecast());
+    dispatch(calculateGoalForecast());
   }, [dispatch]);
 
   const handleBalanceUpdate = () => {
@@ -109,9 +127,40 @@ const Dashboard = () => {
       }
     });
 
-    return Array.from(dailyTotals.values()).sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
-    );
+    let chartData = Array.from(dailyTotals.values());
+
+    // Добавляем прогнозные данные с корректной обработкой дат
+    if (showForecast && budgetForecast?.length) {
+      const lastDataDate =
+        chartData.length > 0
+          ? new Date(
+              chartData[chartData.length - 1].date
+                .split(".")
+                .reverse()
+                .join("-")
+            )
+          : new Date();
+
+      budgetForecast.forEach((forecast, index) => {
+        const forecastDate = new Date(lastDataDate);
+        forecastDate.setDate(forecastDate.getDate() + index + 1);
+
+        const formattedDate = forecastDate.toLocaleDateString("uk-UA");
+
+        chartData.push({
+          date: formattedDate,
+          projectedExpense: forecast.projectedExpense,
+          projectedIncome: forecast.projectedIncome,
+        });
+      });
+    }
+
+    // Сортируем данные по дате
+    return chartData.sort((a, b) => {
+      const dateA = new Date(a.date.split(".").reverse().join("-"));
+      const dateB = new Date(b.date.split(".").reverse().join("-"));
+      return dateA - dateB;
+    });
   };
 
   const calculateAmountToGoal = () => {
@@ -123,9 +172,10 @@ const Dashboard = () => {
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
+      const formattedDate = label; // Дата уже в правильном формате
       return (
         <div className={styles.tooltip}>
-          <p className={styles.tooltipText}>{label}</p>
+          <p className={styles.tooltipText}>{formattedDate}</p>
           {payload.map((entry, index) => (
             <p
               key={index}
@@ -221,9 +271,70 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div className={styles.forecastSection}>
+        <div className={styles.card}>
+          <div className={styles.statsCard}>
+            <div
+              className={`${styles.iconWrapper} ${styles.iconWrapperPurple}`}
+            >
+              <Calculator className={`${styles.icon} ${styles.iconPurple}`} />
+            </div>
+            <div className={styles.statsContent}>
+              <p className={styles.statsLabel}>Прогноз балансу (30 днів)</p>
+              {forecastsLoading ? (
+                <p className={styles.statsValue}>Завантаження...</p>
+              ) : budgetForecast?.length ? (
+                <p className={styles.statsValue}>
+                  <CurrencyDisplay
+                    amount={
+                      budgetForecast[budgetForecast.length - 1].projectedBalance
+                    }
+                  />
+                </p>
+              ) : (
+                <p className={styles.statsValue}>Немає даних</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {activeGoal && goalForecast && (
+          <div className={styles.card}>
+            <div className={styles.statsCard}>
+              <div
+                className={`${styles.iconWrapper} ${styles.iconWrapperTeal}`}
+              >
+                <TrendingUp className={`${styles.icon} ${styles.iconTeal}`} />
+              </div>
+              <div className={styles.statsContent}>
+                <p className={styles.statsLabel}>Прогноз досягнення цілі</p>
+                <div className={styles.goalForecast}>
+                  <p className={styles.statsValue}>
+                    {goalForecast.monthsToGoal} місяців
+                  </p>
+                  <p className={styles.probability}>
+                    Ймовірність: {goalForecast.probability.toFixed(1)}%
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className={styles.card}>
         <div className={styles.chartHeader}>
-          <h2 className={styles.title}>Динаміка за період</h2>
+          <div className={styles.chartControls}>
+            <h2 className={styles.title}>Динаміка за період</h2>
+            <label className={styles.forecastToggle}>
+              <input
+                type="checkbox"
+                checked={showForecast}
+                onChange={(e) => setShowForecast(e.target.checked)}
+              />
+              Показати прогноз
+            </label>
+          </div>
           <div className={styles.timeRangeButtons}>
             {timeRangeButtons.map((button) => (
               <button
@@ -242,11 +353,15 @@ const Dashboard = () => {
           <LineChart
             width={800}
             height={300}
-            data={chartData}
+            data={processTransactionsForChart()}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) => value} // Дата уже в правильном формате
+            />
             <YAxis
               tick={{ fontSize: 12 }}
               tickFormatter={(value) => `${value.toLocaleString()}`}
@@ -271,6 +386,26 @@ const Dashboard = () => {
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}
             />
+            {showForecast && (
+              <>
+                <Line
+                  type="monotone"
+                  dataKey="projectedExpense"
+                  stroke="#ef4444"
+                  name="Прогноз витрат"
+                  strokeDasharray="5 5"
+                  dot={false}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="projectedIncome"
+                  stroke="#22c55e"
+                  name="Прогноз доходів"
+                  strokeDasharray="5 5"
+                  dot={false}
+                />
+              </>
+            )}
           </LineChart>
         </div>
       </div>
