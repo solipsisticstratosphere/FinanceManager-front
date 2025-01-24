@@ -38,6 +38,7 @@ import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 import { selectUserName } from "../../redux/auth/selectors";
 import {
   selectBudgetForecast,
+  selectBudgetForecastForMonth,
   selectForecastsLoading,
   selectGoalForecast,
 } from "../../redux/forecasts/selectors";
@@ -48,7 +49,7 @@ import {
 
 const Dashboard = () => {
   const [newBalance, setNewBalance] = useState("");
-  const [timeRange, setTimeRange] = useState("7d"); // Додаємо стан для періоду
+  const [timeRange, setTimeRange] = useState("7d");
   const [showForecast, setShowForecast] = useState(false);
 
   const transactions = useSelector(selectTransactions);
@@ -60,7 +61,7 @@ const Dashboard = () => {
   const budgetForecast = useSelector(selectBudgetForecast);
   const goalForecast = useSelector(selectGoalForecast);
   const forecastsLoading = useSelector(selectForecastsLoading);
-
+  const budgetForecastMonth = useSelector(selectBudgetForecastForMonth);
   const activeGoal = useSelector(selectActiveGoal);
 
   const navigate = useNavigate();
@@ -73,6 +74,13 @@ const Dashboard = () => {
     dispatch(calculateBudgetForecast());
     dispatch(calculateGoalForecast());
   }, [dispatch]);
+
+  useEffect(() => {
+    // Disable forecast when time range is not 6 months
+    if (timeRange !== "6m") {
+      setShowForecast(false);
+    }
+  }, [timeRange]);
 
   const handleBalanceUpdate = () => {
     if (!newBalance) return;
@@ -100,17 +108,15 @@ const Dashboard = () => {
 
   const processTransactionsForChart = () => {
     if (!transactions?.length) return [];
-
     const dailyTotals = new Map();
     const dateLimit = getDateRangeLimit();
-
     const sortedTransactions = [...transactions]
       .filter((transaction) => new Date(transaction.date) >= dateLimit)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
+    // Process actual transaction data
     sortedTransactions.forEach((transaction) => {
       const date = new Date(transaction.date).toLocaleDateString("uk-UA");
-
       if (!dailyTotals.has(date)) {
         dailyTotals.set(date, {
           date,
@@ -118,7 +124,6 @@ const Dashboard = () => {
           income: 0,
         });
       }
-
       const daily = dailyTotals.get(date);
       if (transaction.type === "expense") {
         daily.expenses += transaction.amount;
@@ -129,33 +134,21 @@ const Dashboard = () => {
 
     let chartData = Array.from(dailyTotals.values());
 
-    // Добавляем прогнозные данные с корректной обработкой дат
+    // Process forecast data using actual forecast dates
     if (showForecast && budgetForecast?.length) {
-      const lastDataDate =
-        chartData.length > 0
-          ? new Date(
-              chartData[chartData.length - 1].date
-                .split(".")
-                .reverse()
-                .join("-")
-            )
-          : new Date();
-
-      budgetForecast.forEach((forecast, index) => {
-        const forecastDate = new Date(lastDataDate);
-        forecastDate.setDate(forecastDate.getDate() + index + 1);
-
-        const formattedDate = forecastDate.toLocaleDateString("uk-UA");
-
+      budgetForecast.forEach((forecast) => {
+        const forecastDate = new Date(forecast.date).toLocaleDateString(
+          "uk-UA"
+        );
         chartData.push({
-          date: formattedDate,
+          date: forecastDate,
           projectedExpense: forecast.projectedExpense,
           projectedIncome: forecast.projectedIncome,
         });
       });
     }
 
-    // Сортируем данные по дате
+    // Sort the entire chart data by date
     return chartData.sort((a, b) => {
       const dateA = new Date(a.date.split(".").reverse().join("-"));
       const dateB = new Date(b.date.split(".").reverse().join("-"));
@@ -224,7 +217,11 @@ const Dashboard = () => {
             <input
               type="number"
               value={newBalance}
-              onChange={(e) => setNewBalance(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setNewBalance(value === "" ? "" : Math.max(0, Number(value)));
+              }}
+              min="0"
               className={styles.input}
               placeholder="Новий баланс"
               disabled={isLoading}
@@ -286,9 +283,7 @@ const Dashboard = () => {
               ) : budgetForecast?.length ? (
                 <p className={styles.statsValue}>
                   <CurrencyDisplay
-                    amount={
-                      budgetForecast[budgetForecast.length - 1].projectedBalance
-                    }
+                    amount={budgetForecast[0].projectedBalance}
                   />
                 </p>
               ) : (
@@ -326,11 +321,16 @@ const Dashboard = () => {
         <div className={styles.chartHeader}>
           <div className={styles.chartControls}>
             <h2 className={styles.title}>Динаміка за період</h2>
-            <label className={styles.forecastToggle}>
+            <label
+              className={`${styles.forecastToggle} ${
+                timeRange !== "6m" ? styles.forecastToggleDisabled : ""
+              }`}
+            >
               <input
                 type="checkbox"
                 checked={showForecast}
                 onChange={(e) => setShowForecast(e.target.checked)}
+                disabled={timeRange !== "6m"}
               />
               Показати прогноз
             </label>

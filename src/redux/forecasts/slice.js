@@ -1,41 +1,45 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  calculateBudgetForecast,
-  calculateGoalForecast,
-  fetchForecast,
-} from "./operations";
+import { calculateBudgetForecast, calculateGoalForecast } from "./operations";
 
 const initialState = {
-  budgetForecast: [],
+  budgetForecasts: [],
   goalForecast: null,
   isLoading: false,
   error: null,
+  lastUpdated: null,
 };
 
-const forecastSlice = createSlice({
+const forecastsSlice = createSlice({
   name: "forecasts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchForecast.pending, (state) => {
+      .addCase(calculateBudgetForecast.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
-      .addCase(fetchForecast.fulfilled, (state, action) => {
+      .addCase(calculateBudgetForecast.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.budgetForecast = action.payload;
+        state.budgetForecasts = action.payload.budgetForecasts;
+        state.lastUpdated = action.payload.lastUpdated;
       })
-      .addCase(fetchForecast.rejected, (state, action) => {
+      .addCase(calculateBudgetForecast.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(calculateBudgetForecast.fulfilled, (state, action) => {
-        state.budgetForecast = action.payload;
+      .addCase(calculateGoalForecast.pending, (state) => {
+        state.isLoading = true;
       })
       .addCase(calculateGoalForecast.fulfilled, (state, action) => {
-        state.goalForecast = action.payload;
+        state.isLoading = false;
+        state.goalForecast = action.payload.goalForecast;
+      })
+      .addCase(calculateGoalForecast.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const forecastsReducer = forecastSlice.reducer;
+export const forecastsReducer = forecastsSlice.reducer;

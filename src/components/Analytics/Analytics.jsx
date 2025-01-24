@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   BarChart,
@@ -13,26 +14,26 @@ import styles from "./Analytics.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 
 const Analytics = () => {
+  const [viewType, setViewType] = useState("expense");
   const transactions = useSelector(selectTransactions);
 
-  const processExpensesByCategory = () => {
+  const processTransactionsByCategory = () => {
     if (!transactions?.length) return [];
 
-    const expensesByCategory = transactions.reduce((acc, transaction) => {
-      if (transaction.type === "expense") {
+    const categoriesMap = transactions.reduce((acc, transaction) => {
+      if (transaction.type === viewType) {
         acc[transaction.category] =
           (acc[transaction.category] || 0) + transaction.amount;
       }
       return acc;
     }, {});
 
-    return Object.entries(expensesByCategory).map(([category, amount]) => ({
-      category,
-      amount,
-    }));
+    return Object.entries(categoriesMap)
+      .map(([category, amount]) => ({ category, amount }))
+      .sort((a, b) => b.amount - a.amount);
   };
 
-  const chartData = processExpensesByCategory();
+  const chartData = processTransactionsByCategory();
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -40,7 +41,7 @@ const Analytics = () => {
         <div className={styles.tooltip}>
           <p className={styles.label}>{label}</p>
           <p className={styles.value}>
-            <CurrencyDisplay amount={payload[0].value.toLocaleString()} />
+            <CurrencyDisplay amount={payload[0].value} />
           </p>
         </div>
       );
@@ -48,10 +49,34 @@ const Analytics = () => {
     return null;
   };
 
+  const barColor = viewType === "expense" ? "#FF6B6B" : "#2ECC71";
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h2 className={styles.title}>Распределение расходов</h2>
+        <div className={styles.chartHeader}>
+          <h2 className={styles.title}>
+            {viewType === "expenses" ? "Розподіл витрат" : "Розподіл доходів"}
+          </h2>
+          <div className={styles.viewToggle}>
+            <button
+              onClick={() => setViewType("expense")}
+              className={`${styles.toggleButton} ${
+                viewType === "expense" ? styles.activeToggle : ""
+              }`}
+            >
+              Витрати
+            </button>
+            <button
+              onClick={() => setViewType("income")}
+              className={`${styles.toggleButton} ${
+                viewType === "income" ? styles.activeToggle : ""
+              }`}
+            >
+              Доходи
+            </button>
+          </div>
+        </div>
         <div className={styles.chartContainer}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -65,7 +90,7 @@ const Analytics = () => {
                 tickFormatter={(value) => `${value.toLocaleString()}`}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="amount" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="amount" fill={barColor} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

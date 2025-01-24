@@ -23,6 +23,7 @@
 }
 
 .statsCard {
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -327,4 +328,13 @@
   padding: 2rem;
   color: #6b7280;
   font-style: italic;
+}
+.forecastToggleDisabled {
+  color: #888;
+  cursor: not-allowed;
+}
+
+.forecastToggleDisabled input {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
