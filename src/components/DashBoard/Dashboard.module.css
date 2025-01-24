@@ -329,3 +329,12 @@
   color: #6b7280;
   font-style: italic;
 }
+.forecastToggleDisabled {
+  color: #888;
+  cursor: not-allowed;
+}
+
+.forecastToggleDisabled input {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

@@ -4,3 +4,5 @@ export const selectForecastsLoading = (state) => state.forecasts.isLoading;
 export const selectForecastsError = (state) => state.forecasts.error;
 export const selectForecastsLastUpdated = (state) =>
   state.forecasts.lastUpdated;
+export const selectBudgetForecastForMonth = (state) =>
+  state.forecasts.budgetForecasts[0];
