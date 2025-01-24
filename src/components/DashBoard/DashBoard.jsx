@@ -48,7 +48,7 @@ import {
 
 const Dashboard = () => {
   const [newBalance, setNewBalance] = useState("");
-  const [timeRange, setTimeRange] = useState("7d"); // Додаємо стан для періоду
+  const [timeRange, setTimeRange] = useState("7d");
   const [showForecast, setShowForecast] = useState(false);
 
   const transactions = useSelector(selectTransactions);
@@ -224,7 +224,11 @@ const Dashboard = () => {
             <input
               type="number"
               value={newBalance}
-              onChange={(e) => setNewBalance(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setNewBalance(value === "" ? "" : Math.max(0, Number(value)));
+              }}
+              min="0"
               className={styles.input}
               placeholder="Новий баланс"
               disabled={isLoading}

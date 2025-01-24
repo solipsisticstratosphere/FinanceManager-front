@@ -23,6 +23,7 @@
 }
 
 .statsCard {
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   gap: 1rem;
