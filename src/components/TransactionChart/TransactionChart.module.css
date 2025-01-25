@@ -1,0 +1,97 @@
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chartContainer {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chartControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.timeRangeButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.timeRangeButton {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.timeRangeButton:hover {
+  background: #f1f5f9;
+}
+
+.timeRangeButtonActive {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.timeRangeButtonActive:hover {
+  background: #2563eb;
+}
+
+.tooltip {
+  background-color: white;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.tooltipText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.tooltipEntry {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.forecastToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.forecastToggle input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.forecastToggleDisabled {
+  color: #888;
+  cursor: not-allowed;
+}
+
+.forecastToggleDisabled input {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

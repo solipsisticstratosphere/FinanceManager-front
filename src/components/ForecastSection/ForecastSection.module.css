@@ -1,0 +1,72 @@
+.forecastSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.statsCard {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconWrapper {
+  padding: 0.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconWrapperPurple {
+  background-color: rgba(147, 51, 234, 0.1);
+}
+
+.iconWrapperTeal {
+  background-color: rgba(20, 184, 166, 0.1);
+}
+
+.iconPurple {
+  color: rgb(147, 51, 234);
+}
+
+.iconTeal {
+  color: rgb(20, 184, 166);
+}
+
+.statsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statsLabel {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.statsValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.goalForecast {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.probability {
+  font-size: 0.875rem;
+  color: #6b7280;
+}

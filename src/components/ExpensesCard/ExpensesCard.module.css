@@ -1,0 +1,50 @@
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.statsCard {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconWrapper {
+  padding: 0.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconWrapperRed {
+  background-color: #fee2e2;
+}
+
+.iconRed {
+  color: #dc2626;
+}
+
+.statsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statsLabel {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.statsValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.valueRed {
+  color: #ef4444;
+}
