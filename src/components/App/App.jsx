@@ -26,6 +26,17 @@ const SettingsPage = lazy(() =>
   import("../../pages/SettingsPage/SettingsPage")
 );
 
+const preloadComponents = () => {
+  import("../../pages/LandingPage/LandingPage");
+  import("../../pages/SignUpPage/SignupPage");
+  import("../../pages/SignInPage/SigninPage");
+  import("../../pages/MainPage/MainPage");
+  import("../../pages/GoalsPage/GoalsPage");
+  import("../../pages/TransactionsPage/TransactionsPage");
+  import("../../pages/AnalyticsPage/AnalyticsPage");
+  import("../../pages/SettingsPage/SettingsPage");
+};
+
 export default function App() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
@@ -36,6 +47,10 @@ export default function App() {
       dispatch(refreshUser());
     }
   }, [dispatch, token, failedRefresh]);
+
+  useEffect(() => {
+    preloadComponents();
+  }, []);
 
   return (
     <>

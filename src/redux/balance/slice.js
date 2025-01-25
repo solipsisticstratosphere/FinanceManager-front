@@ -5,6 +5,7 @@ const initialState = {
   balance: 0,
   isLoading: false,
   error: null,
+  isBalanceInitialized: false,
 };
 
 const slice = createSlice({
@@ -18,6 +19,7 @@ const slice = createSlice({
       .addCase(fetchBalance.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.balance = payload.data.balance;
+        state.isBalanceInitialized = payload.data.balance > 0;
       })
       .addCase(fetchBalance.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -29,6 +31,7 @@ const slice = createSlice({
       .addCase(updateBalance.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.balance = payload.data.balance;
+        state.isBalanceInitialized = true;
       })
       .addCase(updateBalance.rejected, (state, { payload }) => {
         state.isLoading = false;
