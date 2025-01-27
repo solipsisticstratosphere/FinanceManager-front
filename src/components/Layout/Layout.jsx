@@ -10,6 +10,7 @@ import {
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/operations";
 import styles from "./Layout.module.css";
+import toast from "react-hot-toast";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ const Layout = () => {
       })
       .catch((err) => {
         console.error("Ошибка при выходе из системы:", err);
+        toast.error("Ошибка при выходе из системы");
+        navigate("/signin");
       });
   };
 

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   logIn,
+  loginWithGoogle,
   logout,
   refreshUser,
   register,
@@ -97,6 +98,7 @@ const slice = createSlice({
         state.failedRefresh = true;
         state.error = action.payload;
       })
+      //UpdateSettings
       .addCase(updateUserSettings.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -109,6 +111,25 @@ const slice = createSlice({
       .addCase(updateUserSettings.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.error = payload;
+      })
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.token = action.payload.token;
+
+        state.user = {
+          ...state.user,
+          ...action.payload.user,
+        };
+        state.isLoggedIn = true;
+        state.isLoading = false;
+        state.error = false;
+      })
+      .addCase(loginWithGoogle.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.error = true;
       });
   },
 });

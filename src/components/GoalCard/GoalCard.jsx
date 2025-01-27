@@ -20,13 +20,13 @@ const GoalCard = () => {
         </div>
         <div className={styles.statsContent}>
           <p className={styles.statsLabel}>До цілі</p>
-          <p className={`${styles.statsValue} ${styles.valueGreen}`}>
+          <div className={`${styles.statsValue} ${styles.valueGreen}`}>
             {activeGoal ? (
               <CurrencyDisplay amount={calculateAmountToGoal()} />
             ) : (
-              <p className={styles.statsValue}>Ціль не обрана</p>
+              "Ціль не обрана"
             )}
-          </p>
+          </div>
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ import PrivateRoute from "../../routes/PrivateRoute";
 import PublicRegisterRoute from "../../routes/PublicRegisterRoute";
 import PublicLayout from "../PublicLayout/PublicLayout";
 import { Toaster } from "react-hot-toast";
+import ConfirmOAuth from "../../pages/ConfirmOAuth/ConfirmOAuth";
 
 // Lazy load components
 const LandingPage = lazy(() => import("../../pages/LandingPage/LandingPage"));
@@ -150,6 +151,7 @@ export default function App() {
               }
             />
           </Route>
+          <Route path="/confirm-google-auth" element={<ConfirmOAuth />} />
         </Routes>
       </Suspense>
     </>

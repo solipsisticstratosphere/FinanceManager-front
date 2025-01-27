@@ -13,12 +13,13 @@ import {
 } from "recharts";
 import styles from "./TransactionChart.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
+import { selectBudgetForecast } from "../../redux/forecasts/selectors";
 
 const TransactionChart = () => {
   const [timeRange, setTimeRange] = useState("7d");
   const [showForecast, setShowForecast] = useState(false);
   const transactions = useSelector(selectTransactions);
-
+  const forecasts = useSelector(selectBudgetForecast);
   const getDateRangeLimit = () => {
     const now = new Date();
     switch (timeRange) {
@@ -66,8 +67,33 @@ const TransactionChart = () => {
       return dateA - dateB;
     });
   };
+  const processForecastData = () => {
+    if (!forecasts?.length) return [];
 
+    // Отримуємо останню дату з фактичних даних
+    const lastActualDate =
+      chartData.length > 0
+        ? new Date(
+            chartData[chartData.length - 1].date.split(".").reverse().join("-")
+          )
+        : new Date();
+
+    // Фільтруємо прогнози, залишаючи тільки ті, що після останньої фактичної дати
+    return forecasts
+      .filter((forecast) => new Date(forecast.date) > lastActualDate)
+      .map((forecast) => ({
+        date: new Date(forecast.date).toLocaleDateString("uk-UA"),
+        projectedExpense: forecast.projectedExpense,
+        projectedIncome: forecast.projectedIncome,
+      }))
+      .sort((a, b) => {
+        const dateA = new Date(a.date.split(".").reverse().join("-"));
+        const dateB = new Date(b.date.split(".").reverse().join("-"));
+        return dateA - dateB;
+      });
+  };
   const chartData = processTransactionsForChart();
+  const forecastData = processForecastData();
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -133,11 +159,14 @@ const TransactionChart = () => {
         <LineChart
           width={800}
           height={300}
-          data={chartData}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+          <XAxis
+            dataKey="date"
+            tick={{ fontSize: 12 }}
+            allowDuplicatedCategory={false}
+          />
           <YAxis
             tick={{ fontSize: 12 }}
             tickFormatter={(value) => `${value.toLocaleString()}`}
@@ -145,6 +174,7 @@ const TransactionChart = () => {
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Line
+            data={chartData}
             type="monotone"
             dataKey="expenses"
             stroke="#ef4444"
@@ -154,6 +184,7 @@ const TransactionChart = () => {
             activeDot={{ r: 6 }}
           />
           <Line
+            data={chartData}
             type="monotone"
             dataKey="income"
             stroke="#22c55e"
@@ -162,6 +193,31 @@ const TransactionChart = () => {
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
           />
+          {/* Прогнозні лінії */}
+          {showForecast && timeRange === "6m" && forecastData.length > 0 && (
+            <>
+              <Line
+                data={forecastData}
+                type="monotone"
+                dataKey="projectedExpense"
+                stroke="#ef4444"
+                strokeDasharray="5 5"
+                name="Прогноз витрат"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+              />
+              <Line
+                data={forecastData}
+                type="monotone"
+                dataKey="projectedIncome"
+                stroke="#22c55e"
+                strokeDasharray="5 5"
+                name="Прогноз доходів"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+              />
+            </>
+          )}
         </LineChart>
       </div>
     </div>
