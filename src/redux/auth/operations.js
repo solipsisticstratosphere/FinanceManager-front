@@ -46,13 +46,16 @@ export const logIn = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
-    await axios.post("/auth/logout");
+    const response = await axios.post("/auth/logout");
+
     clearAuthHeader();
+
+    return response.data;
   } catch (error) {
-    if (error.response && error.response.data) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-    return thunkAPI.rejectWithValue(error.message);
+    console.error("Logout error:", error);
+    return thunkAPI.rejectWithValue(
+      error.response?.data || { message: "Failed to logout" }
+    );
   }
 });
 
@@ -97,6 +100,54 @@ export const updateUserSettings = createAsyncThunk(
         return thunkAPI.rejectWithValue(error.response.data);
       }
       return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const loginWithGoogle = createAsyncThunk(
+  "auth/googleLogin",
+  async (code, thunkAPI) => {
+    try {
+      const response = await axios.post("/auth/confirm-oauth", { code });
+
+      if (!response.data?.data?.accessToken) {
+        throw new Error("Invalid response format from server");
+      }
+
+      const { accessToken } = response.data.data;
+      setAuthHeader(accessToken);
+
+      const { data: userResponse } = await axios.get("/users/current");
+
+      if (!userResponse?.data && !userResponse?.email) {
+        throw new Error("Invalid user data received");
+      }
+
+      const userData = userResponse.data || userResponse;
+
+      return {
+        token: accessToken,
+        user: {
+          name: userData.name || "",
+          email: userData.email || "",
+          balance: userData.balance || 0,
+          avatarUrl: userData.avatarUrl || "",
+        },
+      };
+    } catch (error) {
+      // Improve error handling
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to login with Google";
+
+      console.error("Google login error:", {
+        message: errorMessage,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );
