@@ -13,6 +13,27 @@ const ForecastSection = () => {
   const budgetForecast = useSelector(selectBudgetForecast);
   const goalForecast = useSelector(selectGoalForecast);
 
+  const formatMonthWord = (number) => {
+    const absNumber = Math.abs(number);
+    const lastDigit = absNumber % 10;
+    const lastTwoDigits = absNumber % 100;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+      return "місяців";
+    }
+
+    switch (lastDigit) {
+      case 1:
+        return "місяць";
+      case 2:
+      case 3:
+      case 4:
+        return "місяці";
+      default:
+        return "місяців";
+    }
+  };
+
   return (
     <div className={styles.forecastSection}>
       <div className={styles.card}>
@@ -45,7 +66,8 @@ const ForecastSection = () => {
               <p className={styles.statsLabel}>Прогноз досягнення цілі</p>
               <div className={styles.goalForecast}>
                 <p className={styles.statsValue}>
-                  {goalForecast.monthsToGoal} місяців
+                  {goalForecast.monthsToGoal}{" "}
+                  {formatMonthWord(goalForecast.monthsToGoal)}
                 </p>
                 <p className={styles.probability}>
                   Ймовірність: {goalForecast.probability.toFixed(1)}%

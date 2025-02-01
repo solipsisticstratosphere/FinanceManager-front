@@ -18,6 +18,7 @@ import {
 } from "../../redux/goals/selectrors";
 import styles from "./Goals.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
+import toast from "react-hot-toast";
 
 // Validation schema
 const GoalSchema = Yup.object().shape({
@@ -45,8 +46,20 @@ const Goals = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchGoals());
-  }, [dispatch]);
+    if (goals && goals.length > 0) {
+      goals.forEach((goal) => {
+        const isExpired = new Date(goal.deadline) < new Date();
+
+        if (isExpired && goal.isActive) {
+          dispatch(deactivateGoal(goal._id));
+          toast.error(`Ціль "${goal.title}" просрочена`, {
+            duration: 4000,
+            position: "top-right",
+          });
+        }
+      });
+    }
+  }, [goals, dispatch]);
 
   const handleCreateGoal = (values, { resetForm }) => {
     dispatch(createGoal(values))
@@ -59,6 +72,17 @@ const Goals = () => {
   };
 
   const handleGoalAction = (goalId, action) => {
+    const goal = goals.find((g) => g._id === goalId);
+    const isExpired = new Date(goal.deadline) < new Date();
+
+    if (action === "activate" && isExpired) {
+      toast.error("Неможливо активувати просрочену ціль", {
+        duration: 3000,
+        position: "top-right",
+      });
+      return;
+    }
+
     switch (action) {
       case "activate":
         dispatch(setActiveGoal(goalId));
@@ -98,58 +122,66 @@ const Goals = () => {
         ) : goalsError ? (
           <p className={styles.error}>Помилка: {goalsError}</p>
         ) : goals && goals.length > 0 ? (
-          goals.map((goal) => (
-            <div
-              key={goal._id}
-              className={`${styles.goalItem} ${
-                goal.isActive ? styles.activeGoal : ""
-              }`}
-            >
-              <div className={styles.goalContent}>
-                <h3 className={styles.goalTitle}>{goal.title}</h3>
-                <div className={styles.goalProgress}>
-                  <div
-                    className={styles.progressBar}
-                    style={{
-                      width: `${
-                        (goal.currentAmount / goal.targetAmount) * 100
-                      }%`,
-                    }}
-                  />
+          goals.map((goal) => {
+            const isExpired = new Date(goal.deadline) < new Date();
+            return (
+              <div
+                key={goal._id}
+                className={`${styles.goalItem} ${
+                  goal.isActive ? styles.activeGoal : ""
+                } ${isExpired ? styles.expiredGoal : ""}`}
+              >
+                <div className={styles.goalContent}>
+                  <h3 className={styles.goalTitle}>
+                    {goal.title}
+                    {isExpired && (
+                      <span className={styles.expiredLabel}>Просрочено</span>
+                    )}
+                  </h3>
+                  <div className={styles.goalProgress}>
+                    <div
+                      className={styles.progressBar}
+                      style={{
+                        width: `${
+                          (goal.currentAmount / goal.targetAmount) * 100
+                        }%`,
+                      }}
+                    />
+                  </div>
+                  <p className={styles.goalAmount}>
+                    <CurrencyDisplay amount={goal.currentAmount} /> /{" "}
+                    <CurrencyDisplay amount={goal.targetAmount} />
+                  </p>
+                  <p className={styles.goalDeadline}>
+                    До: {new Date(goal.deadline).toLocaleDateString()}
+                  </p>
                 </div>
-                <p className={styles.goalAmount}>
-                  <CurrencyDisplay amount={goal.currentAmount} /> /{" "}
-                  <CurrencyDisplay amount={goal.targetAmount} />
-                </p>
-                <p className={styles.goalDeadline}>
-                  До: {new Date(goal.deadline).toLocaleDateString()}
-                </p>
-              </div>
-              <div className={styles.goalActions}>
-                {!goal.isActive ? (
+                <div className={styles.goalActions}>
+                  {!goal.isActive && !isExpired ? (
+                    <button
+                      onClick={() => handleGoalAction(goal._id, "activate")}
+                      className={styles.activateButton}
+                    >
+                      Активувати
+                    </button>
+                  ) : goal.isActive ? (
+                    <button
+                      onClick={() => handleGoalAction(goal._id, "deactivate")}
+                      className={styles.deactivateButton}
+                    >
+                      Деактивувати
+                    </button>
+                  ) : null}
                   <button
-                    onClick={() => handleGoalAction(goal._id, "activate")}
-                    className={styles.activateButton}
+                    onClick={() => handleGoalAction(goal._id, "delete")}
+                    className={styles.deleteButton}
                   >
-                    Активувати
+                    Видалити
                   </button>
-                ) : (
-                  <button
-                    onClick={() => handleGoalAction(goal._id, "deactivate")}
-                    className={styles.deactivateButton}
-                  >
-                    Деактивувати
-                  </button>
-                )}
-                <button
-                  onClick={() => handleGoalAction(goal._id, "delete")}
-                  className={styles.deleteButton}
-                >
-                  Видалити
-                </button>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className={styles.message}>Цілі не знайдено</p>
         )}
