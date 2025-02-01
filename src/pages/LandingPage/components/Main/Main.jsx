@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import css from "./Main.module.css";
 
+import screenshot1 from "../../../../assets/pics/photo_2025-02-01_15-01-32.jpg";
+import screenshot2 from "../../../../assets/pics/photo_2025-02-01_15-04-17.jpg";
+import screenshot3 from "../../../../assets/pics/photo_2025-02-01_15-09-56.jpg";
+import screenshot4 from "../../../../assets/pics/photo_2025-02-01_15-23-24.jpg";
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -34,11 +39,7 @@ export default function Main() {
   const navigate = useNavigate();
   const swiperRef = useRef(null);
 
-  const screenshots = [
-    "/src/assets/pics/pic1.jpg",
-    "/src/assets/pics/pic2.jpg",
-    "/src/assets/pics/pic3.jpg",
-  ];
+  const screenshots = [screenshot1, screenshot2, screenshot3, screenshot4];
 
   return (
     <div className={css.landing}>

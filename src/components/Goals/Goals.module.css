@@ -2,10 +2,19 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #f0f7ff 0%, #fff8e6 100%);
+
   min-height: 100vh;
 }
+.expiredGoal {
+  opacity: 0.6;
+  background-color: #fff0f0;
+}
 
+.expiredLabel {
+  color: red;
+  margin-left: 10px;
+  font-size: 0.8em;
+}
 .header {
   display: flex;
   justify-content: space-between;

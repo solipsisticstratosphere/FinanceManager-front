@@ -37,15 +37,15 @@ const Settings = () => {
     const newErrors = {};
 
     if (formData.newPassword && formData.newPassword.length < 6) {
-      newErrors.newPassword = "Пароль должен быть не менее 6 символов";
+      newErrors.newPassword = "Пароль має бути не менше 6 символів";
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Пароли не совпадают";
+      newErrors.confirmPassword = "Паролі не співпадають";
     }
 
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Неверный формат email";
+      newErrors.email = "Невірний формат email";
     }
 
     setErrors(newErrors);
@@ -90,10 +90,10 @@ const Settings = () => {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h2 className={styles.title}>Настройки профиля</h2>
+        <h2 className={styles.title}>Налаштування профілю</h2>
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.inputGroup}>
-            <label className={styles.label}>Имя</label>
+            <label className={styles.label}>Ім'я</label>
             <input
               name="name"
               value={formData.name}
@@ -115,7 +115,7 @@ const Settings = () => {
           </div>
 
           <div className={styles.inputGroup}>
-            <label className={styles.label}>Текущий пароль</label>
+            <label className={styles.label}>Поточний пароль</label>
             <input
               type="password"
               name="currentPassword"
@@ -126,7 +126,7 @@ const Settings = () => {
           </div>
 
           <div className={styles.inputGroup}>
-            <label className={styles.label}>Новый пароль</label>
+            <label className={styles.label}>Новий пароль</label>
             <input
               type="password"
               name="newPassword"
@@ -140,7 +140,7 @@ const Settings = () => {
           </div>
 
           <div className={styles.inputGroup}>
-            <label className={styles.label}>Подтвердите новый пароль</label>
+            <label className={styles.label}>Підтвердіть новий пароль</label>
             <input
               type="password"
               name="confirmPassword"
@@ -161,16 +161,16 @@ const Settings = () => {
               name="currency"
               className={styles.select}
             >
-              <option value="UAH">Гривна (₴)</option>
-              <option value="USD">Доллар ($)</option>
-              <option value="EUR">Евро (€)</option>
+              <option value="UAH">Гривня (₴)</option>
+              <option value="USD">Долар ($)</option>
+              <option value="EUR">Євро (€)</option>
             </select>
           </div>
 
           {errors.submit && <p className={styles.error}>{errors.submit}</p>}
 
           <button type="submit" className={styles.button} disabled={isLoading}>
-            {isLoading ? "Сохранение..." : "Сохранить изменения"}
+            {isLoading ? "Збереження..." : "Зберегти зміни"}
           </button>
         </form>
       </div>

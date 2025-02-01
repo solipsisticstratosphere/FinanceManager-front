@@ -34,25 +34,25 @@ const Layout = () => {
     <div className={styles.container}>
       <nav className={styles.sidebar}>
         <NavLink to="/home" className={styles.navLink}>
-          <Grid /> Главная
+          <Grid /> Головна
         </NavLink>
         <NavLink to="/goals" className={styles.navLink}>
-          <Target /> Цели
+          <Target /> Цілі
         </NavLink>
         <NavLink to="/transactions" className={styles.navLink}>
-          <Receipt /> Транзакции
+          <Receipt /> Транзакції
         </NavLink>
         <NavLink to="/analytics" className={styles.navLink}>
-          <PieChart /> Аналитика
+          <PieChart /> Аналітика
         </NavLink>
         <NavLink to="/settings" className={styles.navLink}>
-          <SettingsIcon /> Настройки
+          <SettingsIcon /> Налаштування
         </NavLink>
         <button
           onClick={handleLogout}
           className={`${styles.navLink} ${styles.logoutButton}`}
         >
-          <LogOut /> Выход
+          <LogOut /> Вихід
         </button>
       </nav>
       <main className={styles.content}>
