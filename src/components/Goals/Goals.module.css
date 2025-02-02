@@ -2,9 +2,9 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-
   min-height: 100vh;
 }
+
 .expiredGoal {
   opacity: 0.6;
   background-color: #fff0f0;
@@ -15,11 +15,14 @@
   margin-left: 10px;
   font-size: 0.8em;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .title {
@@ -156,6 +159,7 @@
 .deleteButton:hover {
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
+
 .formGroup {
   margin-bottom: 1rem;
 }
@@ -174,6 +178,7 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -325,6 +330,22 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+input[type="date"] {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem 1.25rem;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -344,45 +365,167 @@
     transform: translateY(0);
   }
 }
-input[type="date"] {
-  appearance: none;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 1rem 1.25rem;
+
+/* Tablet Breakpoint */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .goalsList {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .goalItem {
+    padding: 1.5rem;
+  }
+
+  .modalContent {
+    padding: 2rem;
+    width: 95%;
+  }
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-@media (max-width: 768px) {
+/* Mobile Breakpoint */
+@media (max-width: 640px) {
   .container {
     padding: 1rem;
   }
 
-  .modalContent {
-    padding: 1.5rem;
-    margin: 1rem;
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .addButton {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .goalsList {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .goalItem {
+    padding: 1.25rem;
+  }
+
+  .goalTitle {
+    font-size: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .expiredLabel {
+    margin-left: 0;
   }
 
   .goalActions {
     flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .activateButton,
+  .deactivateButton,
+  .deleteButton {
+    width: 100%;
+    padding: 0.875rem;
+  }
+
+  .modalContent {
+    padding: 1.5rem;
+    margin: 0.75rem;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form {
+    gap: 1rem;
+  }
+
+  .input {
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
   }
 
   .modalActions {
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .primaryButton,
   .secondaryButton {
     width: 100%;
+    padding: 0.875rem;
+  }
+}
+
+/* Small Mobile Breakpoint */
+@media (max-width: 380px) {
+  .container {
+    padding: 0.75rem;
   }
 
-  .goalsList {
-    grid-template-columns: 1fr;
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .goalItem {
+    padding: 1rem;
+  }
+
+  .goalTitle {
+    font-size: 1.125rem;
+  }
+
+  .goalAmount {
+    font-size: 1rem;
+  }
+
+  .modalContent {
+    padding: 1.25rem;
+    margin: 0.5rem;
+  }
+}
+
+/* Landscape Mode */
+@media (max-height: 480px) and (orientation: landscape) {
+  .modalContent {
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .modalTitle {
+    margin-bottom: 1rem;
+  }
+
+  .form {
+    gap: 0.75rem;
+  }
+}
+
+/* High-DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .goalItem {
+    border-width: 0.5px;
   }
 }

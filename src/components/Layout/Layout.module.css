@@ -1,125 +1,138 @@
 .container {
-  display: flex;
   min-height: 100vh;
-  background-color: #f8fafc;
+  position: relative;
 }
 
 .sidebar {
-  width: 240px;
-  background-color: #ffffff;
-  padding: 2rem 1rem;
+  width: 280px;
+  height: 100vh;
+  background: #fff;
   border-right: 1px solid #e2e8f0;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   position: fixed;
-  height: 100vh;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  left: 0;
+  top: 0;
 }
 
 .content {
   flex: 1;
-  padding: 2rem;
-  margin-left: 240px;
+  background: #f8fafc;
+  padding: 24px;
+  margin-left: 280px;
   min-height: 100vh;
-  background-color: #f8fafc;
 }
 
 .navLink {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: 12px;
+  padding: 12px;
   color: #64748b;
   text-decoration: none;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease-in-out;
-  font-weight: 500;
+  border-radius: 8px;
+  margin-bottom: 8px;
 }
 
 .navLink:hover {
-  background-color: #f1f5f9;
+  background: #f1f5f9;
   color: #0f172a;
 }
 
-.navLink svg {
-  width: 20px;
-  height: 20px;
-}
-
 .navLink[aria-current="page"] {
-  background-color: #e0e7ff;
+  background: #e0e7ff;
   color: #4f46e5;
 }
 
-.navLink[aria-current="page"]:hover {
-  background-color: #e0e7ff;
-  color: #4338ca;
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: auto;
+}
+
+.logoutButton:hover {
+  background: #fee2e2;
 }
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 64px;
-    padding: 2rem 0.5rem;
+    width: 80px;
+    padding: 24px 12px;
   }
 
   .content {
-    margin-left: 64px;
-    padding: 1rem;
+    margin-left: 80px;
   }
 
-  .navLink {
-    padding: 0.75rem;
-    justify-content: center;
-  }
-
-  .navLink span {
+  .navLink span,
+  .logoutButton span {
     display: none;
   }
 
-  .navLink svg {
-    margin: 0;
+  .navLink {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .logoutButton {
+    justify-content: center;
+    padding: 12px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .container {
+    display: flex;
     flex-direction: column;
+    min-height: 100vh;
   }
 
   .sidebar {
     width: 100%;
     height: auto;
-    position: static;
-    padding: 1rem;
+    position: sticky;
+    top: 0;
     flex-direction: row;
-    justify-content: space-between;
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 12px;
+    gap: 8px;
+    overflow-x: auto;
+    z-index: 10;
+    /* Добавляем следующие свойства для скрытия скролла */
+    -ms-overflow-style: none; /* для IE и Edge */
+    scrollbar-width: none; /* для Firefox */
+  }
+
+  /* Скрываем скролл для Chrome, Safari и Opera */
+  .sidebar::-webkit-scrollbar {
+    display: none;
   }
 
   .content {
     margin-left: 0;
-    padding: 1rem;
+    flex: 1;
+    padding: 16px; /* Уменьшаем паддинг на мобильных */
   }
 
   .navLink {
-    padding: 0.5rem;
+    margin: 0;
+    padding: 8px 12px; /* Увеличиваем горизонтальный паддинг */
+    flex-shrink: 0;
+    min-width: max-content; /* Предотвращает сжатие иконок */
   }
-}
-.logoutButton {
-  margin-top: auto;
-  border: none;
-  background: none;
-  width: 100%;
-  cursor: pointer;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #ef4444;
-}
 
-.logoutButton:hover {
-  background-color: rgba(239, 68, 68, 0.1);
+  .logoutButton {
+    margin: 0;
+    padding: 8px 12px;
+
+    min-width: max-content;
+  }
 }

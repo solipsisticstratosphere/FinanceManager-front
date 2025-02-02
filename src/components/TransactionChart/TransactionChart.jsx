@@ -156,69 +156,71 @@ const TransactionChart = () => {
         </div>
       </div>
       <div className={styles.chartContainer}>
-        <LineChart
-          width={800}
-          height={300}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="date"
-            tick={{ fontSize: 12 }}
-            allowDuplicatedCategory={false}
-          />
-          <YAxis
-            tick={{ fontSize: 12 }}
-            tickFormatter={(value) => `${value.toLocaleString()}`}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Line
-            data={chartData}
-            type="monotone"
-            dataKey="expenses"
-            stroke="#ef4444"
-            name="Витрати"
-            strokeWidth={2}
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
-          />
-          <Line
-            data={chartData}
-            type="monotone"
-            dataKey="income"
-            stroke="#22c55e"
-            name="Доходи"
-            strokeWidth={2}
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
-          />
-          {/* Прогнозні лінії */}
-          {showForecast && timeRange === "6m" && forecastData.length > 0 && (
-            <>
-              <Line
-                data={forecastData}
-                type="monotone"
-                dataKey="projectedExpense"
-                stroke="#ef4444"
-                strokeDasharray="5 5"
-                name="Прогноз витрат"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-              <Line
-                data={forecastData}
-                type="monotone"
-                dataKey="projectedIncome"
-                stroke="#22c55e"
-                strokeDasharray="5 5"
-                name="Прогноз доходів"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-            </>
-          )}
-        </LineChart>
+        <div className={styles.chartWrapper}>
+          <LineChart
+            width={800}
+            height={300}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 12 }}
+              allowDuplicatedCategory={false}
+            />
+            <YAxis
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) => `${value.toLocaleString()}`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Line
+              data={chartData}
+              type="monotone"
+              dataKey="expenses"
+              stroke="#ef4444"
+              name="Витрати"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+            <Line
+              data={chartData}
+              type="monotone"
+              dataKey="income"
+              stroke="#22c55e"
+              name="Доходи"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+            {/* Прогнозні лінії */}
+            {showForecast && timeRange === "6m" && forecastData.length > 0 && (
+              <>
+                <Line
+                  data={forecastData}
+                  type="monotone"
+                  dataKey="projectedExpense"
+                  stroke="#ef4444"
+                  strokeDasharray="5 5"
+                  name="Прогноз витрат"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+                <Line
+                  data={forecastData}
+                  type="monotone"
+                  dataKey="projectedIncome"
+                  stroke="#22c55e"
+                  strokeDasharray="5 5"
+                  name="Прогноз доходів"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+              </>
+            )}
+          </LineChart>
+        </div>
       </div>
     </div>
   );

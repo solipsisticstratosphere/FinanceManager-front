@@ -31,6 +31,7 @@
 }
 
 .addButton {
+  width: 230px;
   background: #4f46e5;
   color: white;
   padding: 10px 20px;
@@ -94,6 +95,7 @@
   background: #fff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .expense .iconWrapper {
@@ -122,6 +124,7 @@
   margin: 0;
   font-size: 16px;
   line-height: 1.4;
+  word-break: break-word;
 }
 
 .transactionDescription {
@@ -129,11 +132,13 @@
   font-size: 14px;
   margin: 4px 0 0 0;
   line-height: 1.4;
+  word-break: break-word;
 }
 
 .transactionDetails {
   text-align: right;
   min-width: 120px;
+  flex-shrink: 0;
 }
 
 .transactionAmount {
@@ -160,14 +165,70 @@
   margin: 4px 0 0 0;
 }
 
-@media (max-width: 640px) {
+/* Large tablets and desktops */
+@media (max-width: 1024px) {
   .transactionsCard {
-    padding: 20px;
-    border-radius: 12px;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .transactionsCard {
+    padding: 24px;
+  }
+
+  .transactionsTitle {
+    font-size: 22px;
   }
 
   .transactionItem {
+    padding: 18px;
+  }
+
+  .iconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .expenseIcon,
+  .incomeIcon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 640px) {
+  .transactionsCard {
     padding: 16px;
+    border-radius: 12px;
+    max-width: 95%;
+  }
+
+  .transactionsHeader {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+
+  .transactionsTitle {
+    font-size: 20px;
+  }
+
+  .addButton {
+    width: 130px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .transactionItem {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .transactionContent {
+    gap: 12px;
   }
 
   .iconWrapper {
@@ -175,11 +236,55 @@
     height: 36px;
   }
 
+  .expenseIcon,
+  .incomeIcon {
+    width: 18px;
+    height: 18px;
+  }
+
   .transactionCategory {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .transactionDescription {
+    font-size: 13px;
+  }
+
+  .transactionDetails {
+    min-width: 100px;
   }
 
   .transactionAmount {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .transactionDate {
+    font-size: 12px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 380px) {
+  .transactionsCard {
+    padding: 12px;
+  }
+
+  .transactionItem {
+    padding: 12px;
+  }
+
+  .iconWrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .expenseIcon,
+  .incomeIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .transactionDetails {
+    min-width: 90px;
   }
 }
