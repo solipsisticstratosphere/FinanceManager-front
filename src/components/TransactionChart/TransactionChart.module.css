@@ -1,14 +1,64 @@
+/* Base styles */
+.container {
+  padding: 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.setupNameLink {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.setupNameLink:hover {
+  color: #0056b3;
+}
+
+/* Chart styles */
 .card {
   background-color: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent margin collapse */
 }
 
 .chartContainer {
   width: 100%;
-  height: 300px;
-  overflow: hidden;
+  min-height: 300px;
+  overflow-x: auto;
+  overflow-y: visible;
+  position: relative;
+  margin-bottom: 1rem; /* Add space for scrollbar */
+}
+
+/* Ensure the chart wrapper maintains aspect ratio */
+.chartWrapper {
+  min-width: 800px; /* Minimum width to prevent chart compression */
+  height: 100%;
 }
 
 .chartHeader {
@@ -16,6 +66,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 1rem;
 }
 
 .chartControls {
@@ -36,6 +87,7 @@
   background: white;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .timeRangeButton:hover {
@@ -58,6 +110,7 @@
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
+  max-width: 200px;
 }
 
 .tooltipText {
@@ -69,6 +122,7 @@
 .tooltipEntry {
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
+  word-break: break-word;
 }
 
 .forecastToggle {
@@ -78,6 +132,7 @@
   font-size: 0.875rem;
   color: #6b7280;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .forecastToggle input[type="checkbox"] {
@@ -94,4 +149,102 @@
 .forecastToggleDisabled input {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+/* Tablet styles */
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 1.25rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .chartHeader {
+    flex-wrap: wrap;
+  }
+}
+
+/* Small tablet styles */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .chartHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chartControls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .timeRangeButtons {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .timeRangeButtons::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .timeRangeButtons::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .timeRangeButtons::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .card {
+    padding: 0.75rem;
+  }
+
+  .timeRangeButton {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .container {
+    padding: 0;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .chartContainer {
+    overflow: visible;
+  }
+
+  .timeRangeButtons,
+  .forecastToggle {
+    display: none;
+  }
 }

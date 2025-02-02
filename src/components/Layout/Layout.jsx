@@ -4,7 +4,7 @@ import {
   Target,
   Receipt,
   PieChart,
-  Settings as SettingsIcon,
+  Settings,
   LogOut,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
@@ -20,39 +20,34 @@ const Layout = () => {
     dispatch(logout())
       .unwrap()
       .then(() => {
-        console.log("Успешный выход из системы");
         navigate("/signin");
       })
-      .catch((err) => {
-        console.error("Ошибка при выходе из системы:", err);
-        toast.error("Ошибка при выходе из системы");
+      .catch(() => {
+        toast.error("Помилка при виході з системи");
         navigate("/signin");
       });
   };
 
+  const navigation = [
+    { path: "/home", icon: <Grid size={20} />, text: "Головна" },
+    { path: "/goals", icon: <Target size={20} />, text: "Цілі" },
+    { path: "/transactions", icon: <Receipt size={20} />, text: "Транзакції" },
+    { path: "/analytics", icon: <PieChart size={20} />, text: "Аналітика" },
+    { path: "/settings", icon: <Settings size={20} />, text: "Налаштування" },
+  ];
+
   return (
     <div className={styles.container}>
       <nav className={styles.sidebar}>
-        <NavLink to="/home" className={styles.navLink}>
-          <Grid /> Головна
-        </NavLink>
-        <NavLink to="/goals" className={styles.navLink}>
-          <Target /> Цілі
-        </NavLink>
-        <NavLink to="/transactions" className={styles.navLink}>
-          <Receipt /> Транзакції
-        </NavLink>
-        <NavLink to="/analytics" className={styles.navLink}>
-          <PieChart /> Аналітика
-        </NavLink>
-        <NavLink to="/settings" className={styles.navLink}>
-          <SettingsIcon /> Налаштування
-        </NavLink>
-        <button
-          onClick={handleLogout}
-          className={`${styles.navLink} ${styles.logoutButton}`}
-        >
-          <LogOut /> Вихід
+        {navigation.map((item) => (
+          <NavLink key={item.path} to={item.path} className={styles.navLink}>
+            {item.icon}
+            <span>{item.text}</span>
+          </NavLink>
+        ))}
+        <button onClick={handleLogout} className={styles.logoutButton}>
+          <LogOut size={20} />
+          <span>Вихід</span>
         </button>
       </nav>
       <main className={styles.content}>

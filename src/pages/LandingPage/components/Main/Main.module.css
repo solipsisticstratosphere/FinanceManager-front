@@ -1,4 +1,4 @@
-/* Main layout */
+/* Base styles and layout */
 .landing {
   min-height: 100vh;
   background: linear-gradient(
@@ -11,7 +11,7 @@
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 1rem;
   min-height: 100vh;
 }
 
@@ -19,77 +19,77 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 3rem 0;
+  padding: 2rem 0;
   gap: 2rem;
 }
 
 /* Left section styles */
 .leftSection {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  flex: 1;
 }
 
 .hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 4rem;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 .heroTitle {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
   font-weight: 800;
   background: linear-gradient(to right, var(--primary-color-black), #2563eb);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   line-height: 1.2;
 }
 
 .heroDescription {
-  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-size: clamp(0.875rem, 1.5vw, 1.25rem);
   color: var(--secondary-color-2);
-  margin-bottom: 2rem;
-  max-width: 42rem;
+  margin-bottom: 1.5rem;
   line-height: 1.7;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .buttonContainer {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 /* Feature cards */
 .features {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.25rem;
   grid-template-columns: 1fr;
   width: 100%;
 }
 
 .featureCard {
   background: white;
-  border-radius: 1.25rem;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .featureCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .featureIcon {
-  margin-bottom: 1.5rem;
-  width: 3.5rem;
-  height: 3.5rem;
-  padding: 0.75rem;
+  margin-bottom: 1rem;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.625rem;
   background: var(--primary-background-color);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,46 +105,47 @@
 }
 
 .featureTitle {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--primary-color-black);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .featureDescription {
   color: var(--secondary-color-2);
-  line-height: 1.7;
-  font-size: 1rem;
+  line-height: 1.6;
+  font-size: 0.875rem;
 }
 
 /* Right section and slider */
 .rightSection {
   width: 100%;
-  margin-top: 2rem;
 }
 
 .swiper {
   width: 100%;
-  height: clamp(300px, 50vw, 500px);
-  border-radius: 1.25rem;
+  height: clamp(250px, 40vw, 450px);
+  border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .swiperSlide {
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slideImage {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 1.25rem;
+  border-radius: 1rem;
 }
 
-/* Navigation overlay styles */
+/* Navigation overlay */
 .navigationOverlay {
   position: absolute;
   top: 0;
@@ -162,22 +163,51 @@
   height: 100%;
   cursor: pointer;
   pointer-events: auto;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
-/* Responsive layouts */
+.navLeft:hover,
+.navRight:hover {
+}
+
+/* Tablet (768px and up) */
 @media (min-width: 768px) {
+  .container {
+    padding: 1.5rem;
+  }
+
   .features {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .featureCard {
+    padding: 1.75rem;
+  }
+
+  .heroDescription {
+    font-size: 1rem;
+  }
+
+  .featureTitle {
+    font-size: 1.25rem;
+  }
+
+  .featureDescription {
+    font-size: 1rem;
+  }
 }
 
+/* Laptop (1024px and up) */
 @media (min-width: 1024px) {
+  .container {
+    padding: 2rem;
+  }
+
   .content {
     flex-direction: row;
     gap: 4rem;
+    padding: 4rem 0;
     align-items: flex-start;
-    padding: 5rem 0;
   }
 
   .leftSection {
@@ -185,31 +215,53 @@
   }
 
   .rightSection {
-    position: sticky;
-    top: 5rem;
     width: 50%;
-    margin-top: 0;
+    position: sticky;
+    top: 4rem;
+  }
+
+  .hero {
+    text-align: left;
+  }
+
+  .buttonContainer {
+    justify-content: flex-start;
+  }
+
+  .heroDescription {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .features {
     grid-template-columns: 1fr;
   }
+
+  .featureCard {
+    padding: 2rem;
+  }
 }
 
+/* Desktop (1280px and up) */
 @media (min-width: 1280px) {
-  .content {
-    gap: 6rem;
+  .container {
+    padding: 2.5rem;
   }
 
-  .container {
-    padding: 0 2rem;
+  .content {
+    gap: 6rem;
+    padding: 5rem 0;
+  }
+
+  .featureCard {
+    padding: 2.25rem;
   }
 }
 
 /* Pagination styles */
 :global(.swiper-pagination-bullet) {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background: rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
 }
@@ -217,4 +269,29 @@
 :global(.swiper-pagination-bullet-active) {
   background: var(--primary-color-black);
   transform: scale(1.2);
+}
+
+/* Animation for feature cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.featureCard {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.featureCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.featureCard:nth-child(3) {
+  animation-delay: 0.4s;
 }

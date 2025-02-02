@@ -129,7 +129,7 @@ export default function Main() {
                   </svg>
                 </div>
                 <div className={css.featureContent}>
-                  <h3 className={css.featureTitle}>Финансовая аналитика</h3>
+                  <h3 className={css.featureTitle}>Фінансова аналітика</h3>
                   <p className={css.featureDescription}>
                     Отримуйте детальні звіти та графіки з ваших фінансів.
                     Розумійте свої витрати та приймайте обґрунтовані рішення.

@@ -1,7 +1,10 @@
+/* Base styles */
 .container {
   padding: 1.5rem;
   max-width: 72rem;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header {
@@ -25,8 +28,75 @@
   color: #007bff;
   text-decoration: underline;
   cursor: pointer;
+  display: inline-block;
 }
 
 .setupNameLink:hover {
   color: #0056b3;
+}
+
+/* Tablet styles */
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 1.25rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+}
+
+/* Small tablet styles */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .title {
+    font-size: 0.875rem;
+  }
+
+  /* Ensure charts and forecasts are scrollable on mobile */
+  .chartContainer,
+  .forecastContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Print styles */
+@media print {
+  .container {
+    padding: 0;
+  }
+
+  .setupNameLink {
+    text-decoration: none;
+    color: #000;
+  }
 }
