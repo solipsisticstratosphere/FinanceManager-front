@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/operations";
 import styles from "./Layout.module.css";
 import toast from "react-hot-toast";
+import CalendarWidget from "../CalendarWidget/CalendarWidget";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -37,23 +38,26 @@ const Layout = () => {
   ];
 
   return (
-    <div className={styles.container}>
-      <nav className={styles.sidebar}>
-        {navigation.map((item) => (
-          <NavLink key={item.path} to={item.path} className={styles.navLink}>
-            {item.icon}
-            <span>{item.text}</span>
-          </NavLink>
-        ))}
-        <button onClick={handleLogout} className={styles.logoutButton}>
-          <LogOut size={20} />
-          <span>Вихід</span>
-        </button>
-      </nav>
-      <main className={styles.content}>
-        <Outlet />
-      </main>
-    </div>
+    <>
+      <div className={styles.container}>
+        <nav className={styles.sidebar}>
+          {navigation.map((item) => (
+            <NavLink key={item.path} to={item.path} className={styles.navLink}>
+              {item.icon}
+              <span>{item.text}</span>
+            </NavLink>
+          ))}
+          <button onClick={handleLogout} className={styles.logoutButton}>
+            <LogOut size={20} />
+            <span>Вихід</span>
+          </button>
+        </nav>
+        <main className={styles.content}>
+          <Outlet />
+        </main>
+      </div>
+      <CalendarWidget />
+    </>
   );
 };
 
