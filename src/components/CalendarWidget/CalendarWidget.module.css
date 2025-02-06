@@ -1,0 +1,178 @@
+.container {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+}
+
+.iconButton {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+}
+
+.iconButton:hover {
+  background-color: #f5f5f5;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+}
+
+.popup {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  min-width: 300px;
+}
+
+.calendarCard {
+  width: 100%;
+}
+
+.weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.weekDay {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.dayWrapper {
+  position: relative;
+}
+
+.day {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin: 0 auto;
+}
+
+.day:hover {
+  opacity: 0.8;
+}
+
+.emptyDay {
+  width: 32px;
+  height: 32px;
+}
+
+.dayEmpty {
+  background-color: #e5e5e5;
+  color: #666;
+}
+
+.dayGreen {
+  background-color: #4ade80;
+  color: white;
+}
+
+.dayRed {
+  background-color: #f87171;
+  color: white;
+}
+
+.dayOrange {
+  background-color: #fb923c;
+  color: white;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background: white;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  font-size: 14px;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dayWrapper:hover .tooltip {
+  display: block;
+}
+
+/* Добавляем стрелочку для тултипа */
+.tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: white;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.05);
+}
+.monthNavigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.navigationButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.monthTitle {
+  font-weight: bold;
+}
+@keyframes pulseHighlight {
+  0% {
+    background-color: white;
+    transform: scale(1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    background-color: #e6f2ff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 8px rgba(0, 100, 255, 0.3);
+  }
+  100% {
+    background-color: white;
+    transform: scale(1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.highlight {
+  animation: pulseHighlight 2s ease-in-out;
+  background-color: #e6f2ff !important;
+  transform: scale(1.1);
+  box-shadow: 0 6px 8px rgba(0, 100, 255, 0.3) !important;
+}

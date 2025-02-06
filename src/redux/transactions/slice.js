@@ -27,7 +27,7 @@ const slice = createSlice({
       })
       .addCase(addTransaction.pending, (state, action) => {
         state.isLoading = true;
-        // Оптимистично добавляем транзакцию во временное состояние
+
         const tempTransaction = {
           ...action.meta.arg,
           _id: "temp_" + Date.now(), // временный ID
