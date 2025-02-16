@@ -12,6 +12,8 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import styles from "./Transactions.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 import { fetchBalance } from "../../redux/balance/operations";
+import MonobankConnect from "../MonobankConnect/MonobankConnect";
+import { getTransactionSourceLabel } from "../../utils/monobank";
 
 const Transactions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,6 +53,7 @@ const Transactions = () => {
   };
   return (
     <>
+      <MonobankConnect />
       <div className={styles.transactionsCard}>
         <div className={styles.transactionsHeader}>
           <h2 className={styles.transactionsTitle}>Транзакції</h2>
@@ -110,6 +113,11 @@ const Transactions = () => {
                   <p className={styles.transactionDate}>
                     {new Date(transaction.date).toLocaleDateString()}
                   </p>
+                  {transaction.source && (
+                    <p className={styles.transactionSource}>
+                      {getTransactionSourceLabel(transaction.source)}
+                    </p>
+                  )}
                 </div>
               </div>
             ))
