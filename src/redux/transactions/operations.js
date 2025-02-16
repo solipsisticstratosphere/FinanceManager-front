@@ -25,21 +25,37 @@ export const addTransaction = createAsyncThunk(
   "transactions/addTransaction",
   async (transaction, thunkAPI) => {
     try {
-      const { data } = await axios.post("/transactions", transaction);
+      const response = await axios.post("/transactions", transaction);
 
-      await Promise.all([
-        thunkAPI.dispatch(fetchTransactions()),
-        thunkAPI.dispatch(fetchBalance()),
-        thunkAPI.dispatch(fetchGoals()),
-      ]);
+      // Check if the response has the expected structure
+      if (
+        response.data?.status === "success" &&
+        response.data?.data?.transaction
+      ) {
+        // Only dispatch other actions if the transaction was successful
+        await Promise.all([
+          thunkAPI.dispatch(fetchTransactions()),
+          thunkAPI.dispatch(fetchBalance()),
+          thunkAPI.dispatch(fetchGoals()),
+        ]);
 
-      return data;
-    } catch (error) {
-      console.error("Error in addTransaction:", error);
-      if (error.response && error.response.data) {
-        return thunkAPI.rejectWithValue(error.response.data);
+        return response.data.data.transaction;
+      } else {
+        return thunkAPI.rejectWithValue("Unexpected response format");
       }
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error) {
+      console.error("Transaction error:", error.response || error);
+
+      // Handle different types of errors
+      if (error.response?.data?.message) {
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      } else if (error.response?.status === 400) {
+        return thunkAPI.rejectWithValue("Invalid transaction data");
+      } else if (error.response?.status === 401) {
+        return thunkAPI.rejectWithValue("Authentication required");
+      } else {
+        return thunkAPI.rejectWithValue("Could not process transaction");
+      }
     }
   }
 );

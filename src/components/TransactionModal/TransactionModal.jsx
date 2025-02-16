@@ -40,14 +40,15 @@ const TransactionModal = ({ onClose, currentBalance }) => {
       try {
         const initialGoalAmount = activeGoal?.currentAmount || 0;
 
-        const result = await dispatch(
-          addTransaction({
-            type: values.type,
-            amount: Number(values.amount),
-            category: values.category,
-            description: values.description,
-          })
-        ).unwrap();
+        // Ensure proper number formatting
+        const transactionData = {
+          type: values.type,
+          amount: Number(values.amount),
+          category: values.category,
+          description: values.description || "", // Ensure description is never undefined
+        };
+
+        const result = await dispatch(addTransaction(transactionData)).unwrap();
 
         if (values.type === "income" && activeGoal) {
           const newAmount = initialGoalAmount + Number(values.amount);
@@ -67,21 +68,23 @@ const TransactionModal = ({ onClose, currentBalance }) => {
             });
 
             await dispatch(deactivateGoal(activeGoal._id));
-            await new Promise((resolve) => setTimeout(resolve, 1000));
           }
         }
 
-        setIsProcessing(false);
         onClose();
       } catch (err) {
-        setIsProcessing(false);
-        setErrors({ submit: err.message || "Сталася помилка" });
+        console.error("Transaction error:", err);
+        toast.error(err.toString(), {
+          duration: 4000,
+          position: "top-center",
+        });
+        setErrors({ submit: err.toString() });
       } finally {
+        setIsProcessing(false);
         setSubmitting(false);
       }
     },
   });
-
   const handleClose = (e) => {
     if (e.target.className.includes(styles.modalOverlay)) {
       if (!isProcessing) {

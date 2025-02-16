@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   connectMonobank,
   disconnectMonobank,
@@ -32,9 +33,22 @@ const MonobankConnect = () => {
   const error = useSelector(selectMonobankError);
 
   useEffect(() => {
-    // При монтировании компонента проверяем статус подключения
     dispatch(getMonobankStatus());
   }, [dispatch]);
+
+  // Show error toast when error state changes
+  useEffect(() => {
+    if (error) {
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error.message || "Произошла ошибка при подключении Монобанка";
+      toast.error(errorMessage, {
+        duration: 4000,
+        position: "top-right",
+      });
+    }
+  }, [error]);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -42,7 +56,7 @@ const MonobankConnect = () => {
 
   const handleConnect = async () => {
     if (!monoToken.trim()) {
-      alert("Пожалуйста, введите токен Монобанка");
+      toast.error("Пожалуйста, введите токен Монобанка");
       return;
     }
 
@@ -61,7 +75,6 @@ const MonobankConnect = () => {
     dispatch(syncMonobankTransactions());
   };
 
-  // Сбрасываем ошибку при изменении поля ввода
   const handleTokenChange = (e) => {
     if (error) {
       dispatch(resetMonobankError());
@@ -152,8 +165,6 @@ const MonobankConnect = () => {
                     placeholder="Введите токен Монобанка"
                     className={styles.tokenInput}
                   />
-
-                  {error && <p className={styles.errorMessage}>{error}</p>}
 
                   <div className={styles.actionButtons}>
                     <button
