@@ -4,6 +4,7 @@ import axios from "axios";
 import { fetchTransactions } from "../transactions/operations";
 import { fetchBalance } from "../balance/operations";
 
+// В операции connectMonobank
 export const connectMonobank = createAsyncThunk(
   "monobank/connect",
   async (token, thunkAPI) => {
@@ -19,6 +20,18 @@ export const connectMonobank = createAsyncThunk(
       return data.data;
     } catch (error) {
       console.error("Error connecting Monobank:", error);
+
+      // Специфическая обработка ошибки "токен уже используется"
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.code === "TOKEN_ALREADY_IN_USE"
+      ) {
+        return thunkAPI.rejectWithValue(
+          "Этот токен уже используется в другом аккаунте. Сначала отключите его там."
+        );
+      }
+
       if (error.response && error.response.data) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
@@ -26,7 +39,6 @@ export const connectMonobank = createAsyncThunk(
     }
   }
 );
-
 export const disconnectMonobank = createAsyncThunk(
   "monobank/disconnect",
   async (_, thunkAPI) => {
