@@ -15,6 +15,7 @@ import { balanceReducer } from "./balance/slice";
 import { transactionsReducer } from "./transactions/slice";
 import { goalsReducer } from "./goals/slice";
 import { forecastsReducer } from "./forecasts/slice";
+import { monobankReducer } from "./monobank/slice";
 
 const authPersistConfig = {
   key: "auth",
@@ -29,6 +30,7 @@ export const store = configureStore({
     transactions: transactionsReducer,
     goals: goalsReducer,
     forecasts: forecastsReducer,
+    monobank: monobankReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

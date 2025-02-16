@@ -1,0 +1,227 @@
+/* components/MonobankConnect/MonobankConnect.module.css */
+.monobankCard {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.monobankHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.monobankTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.bankIcon {
+  margin-right: 10px;
+  color: #3267e3;
+}
+
+.collapseButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.collapseButton:hover {
+  color: #333;
+}
+
+.monobankContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusConnected {
+  color: #2e7d32;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.accountsList {
+  margin-bottom: 15px;
+}
+
+.accountsList h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.accountsList ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.accountItem {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.accountItem:last-child {
+  border-bottom: none;
+}
+
+.syncInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.syncInfo p {
+  color: #666;
+  margin: 0;
+  margin-right: 10px;
+}
+
+.syncButton {
+  display: flex;
+  align-items: center;
+  background-color: #3267e3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.syncButton:hover {
+  background-color: #2756c9;
+}
+
+.syncButton:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.syncIcon {
+  margin-right: 8px;
+}
+
+.rotating {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.disconnectButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.disconnectButton:hover {
+  background-color: #d32f2f;
+}
+
+.disconnectButton:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.disconnectIcon {
+  margin-right: 8px;
+}
+
+.connectForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.tokenHelper {
+  margin-bottom: 15px;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.tokenInput {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.errorMessage {
+  color: #f44336;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.cancelButton:hover {
+  background-color: #d0d0d0;
+}
+
+.connectButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: #3267e3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.connectButton:hover {
+  background-color: #2756c9;
+}
+
+.connectButton:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.connectIcon {
+  margin-right: 8px;
+}

@@ -29,7 +29,11 @@
   color: #111827;
   letter-spacing: 1px;
 }
-
+.transactionSource {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 2px;
+}
 .addButton {
   width: 230px;
   background: #4f46e5;
