@@ -3,17 +3,26 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #fafbff;
 }
 
 .header {
-  background: white;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   z-index: 1000;
   height: 70px;
   display: flex;
   align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.header:hover {
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
 }
 
 .container {
@@ -31,11 +40,30 @@
   font-weight: 700;
   color: var(--primary-color-black);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.25rem 0;
 }
 
 .logo:hover {
-  color: var(--primary-color);
+  color: var(--secondary-color-2);
+  transform: scale(1.02);
+}
+
+.logo::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(to right, var(--primary-color), #3b82f6);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.logo:hover::after {
+  width: 100%;
 }
 
 .actions {
@@ -46,6 +74,31 @@
 
 .signInButton {
   color: var(--primary-color-black);
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.signInButton:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.signInButton::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 50%;
+  background: linear-gradient(to right, var(--primary-color), #4f46e5);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.signInButton:hover::after {
+  width: 80%;
 }
 
 .main {
@@ -54,6 +107,49 @@
   flex-direction: column;
 }
 
+/* Button hover effects for the primary button */
+:global(.button-primary) {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+}
+
+:global(.button-primary:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+:global(.button-primary::before) {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+:global(.button-primary:hover::before) {
+  left: 100%;
+}
+
+/* Button hover effects for text button */
+:global(.button-text) {
+  transition: all 0.3s ease !important;
+}
+
+:global(.button-text:hover) {
+  background-color: rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+/* Mobile styles */
 @media (max-width: 640px) {
   .container {
     padding: 0 1rem;
@@ -66,4 +162,35 @@
   .actions {
     gap: 0.5rem;
   }
+
+  .header {
+    height: 60px;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .logo {
+    font-size: 1.4rem;
+  }
+
+  .header {
+    height: 65px;
+  }
+}
+
+/* Animation for the header when page loads */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.header {
+  animation: slideDown 0.5s ease-out forwards;
 }
