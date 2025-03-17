@@ -216,6 +216,9 @@ Finance Manager - це інноваційна веб-платформа, ств�
 - Express
 - TensorFlow.js (для прогнозування бюджету)
 
+## Backend
+https://github.com/solipsisticstratosphere/FinanceManager-back
+
 ## Author
 
 - Ярослав Кліменко (Yaroslav Klimenko)
