@@ -15,7 +15,7 @@ import ExpensesCard from "../ExpensesCard/ExpensesCard";
 import GoalCard from "../GoalCard/GoalCard";
 import ForecastSection from "../ForecastSection/ForecastSection";
 import TransactionChart from "../TransactionChart/TransactionChart";
-
+import ExchangeRateCard from "../ExchangeRateCard/ExchangeRateCard";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
@@ -45,6 +45,7 @@ const Dashboard = () => {
         <BalanceCard />
         <ExpensesCard />
         <GoalCard />
+        <ExchangeRateCard />
       </div>
       <ForecastSection />
       <TransactionChart />
