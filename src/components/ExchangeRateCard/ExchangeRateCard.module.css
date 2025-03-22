@@ -1,0 +1,97 @@
+/* src/components/ExchangeRateCard/ExchangeRateCard.module.css */
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  margin: 0;
+}
+
+.updateInfo {
+  font-size: 13px;
+  color: #999;
+  font-weight: 400;
+}
+
+.ratesContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.rateItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.currencyCode {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.rateValue {
+  font-size: 15px;
+  color: #333;
+  position: relative;
+}
+
+.rateValue::after {
+  content: "₴";
+  margin-left: 4px;
+  font-size: 14px;
+  color: #555;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: 100px;
+}
+
+.loading {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  border-top-color: #3498db;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  color: #e74c3c;
+  text-align: center;
+  padding: 16px;
+  font-size: 14px;
+}

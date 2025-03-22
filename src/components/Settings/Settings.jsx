@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserSettings } from "../../redux/auth/operations";
+import { fetchExchangeRates } from "../../utils/currencyService";
 import styles from "./Settings.module.css";
 
 const Settings = () => {
@@ -13,18 +14,43 @@ const Settings = () => {
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-    currency: "UAH",
+    currency: user?.currency || "UAH",
   });
 
+  const [previousCurrency, setPreviousCurrency] = useState(
+    user?.currency || "UAH"
+  );
+  const [exchangeRates, setExchangeRates] = useState(null);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    // Load exchange rates when component mounts
+    const loadRates = async () => {
+      try {
+        const rates = await fetchExchangeRates();
+        setExchangeRates(rates);
+      } catch (error) {
+        console.error("Failed to load exchange rates:", error);
+      }
+    };
+
+    loadRates();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // If currency is changing, store the previous value
+    if (name === "currency" && value !== formData.currency) {
+      setPreviousCurrency(formData.currency);
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -71,6 +97,15 @@ const Settings = () => {
     setIsLoading(true);
     try {
       await dispatch(updateUserSettings(updateData)).unwrap();
+
+      // If currency was changed, notify user about conversion
+      if (previousCurrency !== formData.currency && exchangeRates) {
+        // You could display a notification here about the currency change
+        console.log(
+          `Currency changed from ${previousCurrency} to ${formData.currency}`
+        );
+      }
+
       setFormData((prev) => ({
         ...prev,
         currentPassword: "",
@@ -165,6 +200,11 @@ const Settings = () => {
               <option value="USD">Долар ($)</option>
               <option value="EUR">Євро (€)</option>
             </select>
+            {formData.currency !== user?.currency && (
+              <p className={styles.info}>
+                Зміна валюти вплине на відображення всіх фінансових даних.
+              </p>
+            )}
           </div>
 
           {errors.submit && <p className={styles.error}>{errors.submit}</p>}
