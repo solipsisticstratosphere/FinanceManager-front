@@ -45,7 +45,7 @@ export const isTokenExpired = (lastSync) => {
  * Определяет источник транзакции (ручной ввод или Монобанк)
  */
 export const getTransactionSourceLabel = (source) => {
-  return source === "monobank" ? "Монобанк" : "Вручную";
+  return source === "monobank" ? "Монобанк" : "Вручну";
 };
 
 /**

@@ -1,38 +1,58 @@
 /* Base styles */
 .container {
   padding: 1.5rem;
-  max-width: 72rem;
+  max-width: 96rem;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
 }
 
 .header {
-  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
 }
 
 .setupNameLink {
-  color: #007bff;
+  color: #46e5e5;
   text-decoration: underline;
-  cursor: pointer;
-  display: inline-block;
+  font-size: 1.25rem;
 }
 
-.setupNameLink:hover {
-  color: #0056b3;
+.forecastButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #1b8ee0;
+  color: white;
+  border: none;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(14, 215, 255, 0.25);
+}
+
+.forecastButton:hover {
+  background-color: #3897ca;
+  box-shadow: 0 4px 6px rgba(40, 182, 234, 0.35);
 }
 
 /* Tablet styles */
@@ -98,5 +118,22 @@
   .setupNameLink {
     text-decoration: none;
     color: #000;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .forecastButton {
+    width: 100%;
+    justify-content: center;
   }
 }

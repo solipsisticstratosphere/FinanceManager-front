@@ -7,28 +7,23 @@
 }
 
 .header {
-  background: rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 70px;
+  height: 80px; /* Increased height for a more spacious header */
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
 
-.header:hover {
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem; /* Increased padding for better spacing */
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -36,18 +31,17 @@
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.8rem; /* Larger logo font size */
   font-weight: 700;
-  color: var(--primary-color-black);
+  color: #1e3a8a; /* Dark blue color */
   text-decoration: none;
   transition: all 0.3s ease;
   position: relative;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0; /* Increased padding for better click area */
 }
 
 .logo:hover {
-  color: var(--secondary-color-2);
-  transform: scale(1.02);
+  color: #3b82f6; /* Change color on hover */
 }
 
 .logo::after {
@@ -55,9 +49,9 @@
   position: absolute;
   width: 0;
   height: 2px;
-  bottom: -2px;
+  bottom: 10px;
   left: 0;
-  background: linear-gradient(to right, var(--primary-color), #3b82f6);
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
   transition: width 0.3s ease;
   border-radius: 2px;
 }
@@ -68,20 +62,19 @@
 
 .actions {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem; /* Increased gap for better spacing */
   align-items: center;
 }
 
 .signInButton {
-  color: var(--primary-color-black);
+  color: #1e3a8a; /* Dark blue color */
   position: relative;
   transition: all 0.3s ease;
   overflow: hidden;
 }
 
 .signInButton:hover {
-  color: var(--primary-color);
-  transform: translateY(-2px);
+  color: #3b82f6; /* Change color on hover */
 }
 
 .signInButton::after {
@@ -91,7 +84,7 @@
   height: 2px;
   bottom: -2px;
   left: 50%;
-  background: linear-gradient(to right, var(--primary-color), #4f46e5);
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
   transition: all 0.3s ease;
   transform: translateX(-50%);
   border-radius: 2px;
@@ -119,36 +112,6 @@
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
-:global(.button-primary::before) {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.7s ease;
-}
-
-:global(.button-primary:hover::before) {
-  left: 100%;
-}
-
-/* Button hover effects for text button */
-:global(.button-text) {
-  transition: all 0.3s ease !important;
-}
-
-:global(.button-text:hover) {
-  background-color: rgba(0, 0, 0, 0.04);
-  transform: translateY(-2px);
-}
-
 /* Mobile styles */
 @media (max-width: 640px) {
   .container {
@@ -156,7 +119,7 @@
   }
 
   .logo {
-    font-size: 1.25rem;
+    font-size: 1.5rem; /* Adjusted for mobile */
   }
 
   .actions {
@@ -164,22 +127,32 @@
   }
 
   .header {
-    height: 60px;
+    height: 70px; /* Adjusted for mobile */
   }
 }
 
-/* Tablet styles */
 @media (min-width: 641px) and (max-width: 1024px) {
   .logo {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 
   .header {
-    height: 65px;
+    height: 75px;
   }
 }
-
-/* Animation for the header when page loads */
+@media (max-width: 640px) {
+  .logo {
+    font-size: 1.2rem;
+  }
+  .signInButton {
+    padding: 0.7rem 1rem;
+    font-size: 14px;
+  }
+  .signUpButton {
+    padding: 0.7rem 1rem;
+    font-size: 14px;
+  }
+}
 @keyframes slideDown {
   from {
     transform: translateY(-100%);
