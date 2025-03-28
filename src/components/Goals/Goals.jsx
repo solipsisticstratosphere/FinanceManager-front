@@ -20,7 +20,6 @@ import styles from "./Goals.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 import toast from "react-hot-toast";
 
-// Validation schema
 const GoalSchema = Yup.object().shape({
   title: Yup.string()
     .min(2, "Назва цілі занадто коротка")

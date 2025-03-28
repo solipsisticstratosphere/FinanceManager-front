@@ -22,7 +22,7 @@ import styles from "./MonobankConnect.module.css";
 const MonobankConnect = () => {
   const [monoToken, setMonoToken] = useState("");
   const [showTokenInput, setShowTokenInput] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true); // Changed to true for default closed state
 
   const dispatch = useDispatch();
   const isConnected = useSelector(selectMonobankConnected);

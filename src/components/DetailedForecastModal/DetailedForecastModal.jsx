@@ -83,6 +83,23 @@ const DetailedForecastModal = ({ isOpen, onClose, initialTab = "goals" }) => {
     setExpandedGoalDetails(false);
   }, [activeTab, selectedCategory]);
 
+  // Handle closing the modal on Escape key press
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const formatDate = (dateString) => {
@@ -145,8 +162,8 @@ const DetailedForecastModal = ({ isOpen, onClose, initialTab = "goals" }) => {
   };
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>Детальні прогнози</h2>
           <button className={styles.closeButton} onClick={onClose}>
