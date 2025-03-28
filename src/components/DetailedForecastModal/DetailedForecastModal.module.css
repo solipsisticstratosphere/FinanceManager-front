@@ -1,0 +1,421 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: #ffffff;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.closeButton {
+  width: 30px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: #111827;
+  background-color: #f3f4f6;
+}
+
+.tabsContainer {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.tabButton:hover {
+  color: #467ee5;
+}
+
+.activeTab {
+  color: #46b8e5;
+  border-bottom: 2px solid #46d0e5;
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+.modalBody {
+  padding: 20px;
+}
+
+.loading,
+.noData {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-align: center;
+  gap: 12px;
+}
+
+.infoIcon {
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.noDataHint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  max-width: 280px;
+}
+
+.lastUpdated {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.forecastCard {
+  background-color: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.goalName,
+.categoryName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 4px;
+  color: #111827;
+}
+
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.categoryType {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 16px;
+  background-color: #e5e7eb;
+  color: #4b5563;
+}
+
+.forecastDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detailLabel {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.detailValue {
+  font-weight: 500;
+  color: #111827;
+}
+
+.progressBarContainer {
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: #4f46e5;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.categorySelector {
+  margin-bottom: 20px;
+}
+
+.selectLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.categorySelect {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+.expandButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #4b5563;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.expandButton:hover {
+  background-color: #e5e7eb;
+}
+
+.monthlyPredictions {
+  margin-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.predictionsTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.predictionsTable {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.predictionsHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.predictionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.predictionRow:last-child {
+  border-bottom: none;
+}
+
+.currentMonth {
+  background-color: rgba(79, 70, 229, 0.05);
+  font-weight: 500;
+}
+
+.trendUp {
+  color: #10b981;
+}
+
+.trendDown {
+  color: #ef4444;
+}
+
+/* New styles for detailed goal forecast */
+.forecastHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.forecastTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #111827;
+}
+
+.scenariosContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 12px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+}
+
+.scenarioItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scenarioLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.scenarioIcon {
+  color: #6b7280;
+}
+
+.scenarioValue {
+  font-weight: 500;
+  color: #111827;
+}
+
+.riskFactors {
+  margin-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.riskFactorsTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.risksList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.riskItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.riskHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.riskType {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.riskIcon {
+  color: #ef4444;
+}
+
+.riskSeverity {
+  height: 6px;
+  border-radius: 3px;
+  background-color: #ef4444;
+}
+
+@media (max-width: 640px) {
+  .modalContent {
+    width: 95%;
+    max-height: 80vh;
+  }
+
+  .detailItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .tabButton {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .predictionsHeader,
+  .predictionRow {
+    grid-template-columns: 1.5fr 1fr;
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .scenariosContainer {
+    padding: 10px 8px;
+  }
+
+  .scenarioItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

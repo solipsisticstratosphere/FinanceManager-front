@@ -42,7 +42,7 @@ const MonobankConnect = () => {
       const errorMessage =
         typeof error === "string"
           ? error
-          : error.message || "Произошла ошибка при подключении Монобанка";
+          : error.message || "Сталася помилка при підключенні Монобанку";
       toast.error(errorMessage, {
         duration: 4000,
         position: "top-right",
@@ -56,7 +56,7 @@ const MonobankConnect = () => {
 
   const handleConnect = async () => {
     if (!monoToken.trim()) {
-      toast.error("Пожалуйста, введите токен Монобанка");
+      toast.error("Будь ласка, введіть токен Монобанка");
       return;
     }
 
@@ -66,7 +66,7 @@ const MonobankConnect = () => {
   };
 
   const handleDisconnect = async () => {
-    if (window.confirm("Вы уверены, что хотите отключить Монобанк?")) {
+    if (window.confirm("Ви впевнені, що хочете відключити Монобанк?")) {
       await dispatch(disconnectMonobank());
     }
   };
@@ -105,12 +105,12 @@ const MonobankConnect = () => {
           {isConnected ? (
             <>
               <div className={styles.statusConnected}>
-                ✓ Подключено к Монобанку
+                ✓ Підключено до Монобанку
               </div>
 
               {accounts.length > 0 && (
                 <div className={styles.accountsList}>
-                  <h3>Счета:</h3>
+                  <h3>Рахунки:</h3>
                   <ul>
                     {accounts.map((account) => (
                       <li key={account.id} className={styles.accountItem}>
@@ -122,7 +122,7 @@ const MonobankConnect = () => {
               )}
 
               <div className={styles.syncInfo}>
-                <p>Последняя синхронизация: {formatLastSync(lastSync)}</p>
+                <p>Остання синхронізація: {formatLastSync(lastSync)}</p>
                 <button
                   onClick={handleSync}
                   disabled={isSyncing}
@@ -133,7 +133,7 @@ const MonobankConnect = () => {
                       isSyncing ? styles.rotating : ""
                     }`}
                   />
-                  {isSyncing ? "Синхронизация..." : "Синхронизировать"}
+                  {isSyncing ? "Синхронізація..." : "Синхронізувати"}
                 </button>
               </div>
 
@@ -143,7 +143,7 @@ const MonobankConnect = () => {
                 className={styles.disconnectButton}
               >
                 <X className={styles.disconnectIcon} />
-                Отключить Монобанк
+                Відключити Монобанк
               </button>
             </>
           ) : (
@@ -151,10 +151,10 @@ const MonobankConnect = () => {
               {showTokenInput ? (
                 <div className={styles.connectForm}>
                   <p className={styles.tokenHelper}>
-                    Токен можно получить в приложении Монобанка:
+                    Токен можна отримати в додатку Монобанка:
                     <br />
                     <strong>
-                      Настройки → Другое → Разработчикам → Получить токен
+                      Налаштування → Інше → Розробникам → Отримати токен
                     </strong>
                   </p>
 
@@ -162,7 +162,7 @@ const MonobankConnect = () => {
                     type="text"
                     value={monoToken}
                     onChange={handleTokenChange}
-                    placeholder="Введите токен Монобанка"
+                    placeholder="Введіть токен Монобанка"
                     className={styles.tokenInput}
                   />
 
@@ -175,14 +175,14 @@ const MonobankConnect = () => {
                       }}
                       className={styles.cancelButton}
                     >
-                      Отмена
+                      Скасування
                     </button>
                     <button
                       onClick={handleConnect}
                       disabled={isLoading || !monoToken.trim()}
                       className={styles.connectButton}
                     >
-                      {isLoading ? "Подключение..." : "Подключить"}
+                      {isLoading ? "Підключення..." : "Підключити"}
                     </button>
                   </div>
                 </div>
@@ -192,7 +192,7 @@ const MonobankConnect = () => {
                   className={styles.connectButton}
                 >
                   <Banknote className={styles.connectIcon} />
-                  Подключить Монобанк
+                  Підключити Монобанк
                 </button>
               )}
             </>

@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import css from "./PublicLayout.module.css";
 import Button from "../Buttons/Button/Button";
 
-export default function PublicLayout({ children }) {
+export default function PublicLayout() {
   const navigate = useNavigate();
 
   return (
@@ -21,7 +21,11 @@ export default function PublicLayout({ children }) {
             >
               Увійти
             </Button>
-            <Button variant="primary" onClick={() => navigate("/signup")}>
+            <Button
+              variant="primary"
+              className={css.signUpButton}
+              onClick={() => navigate("/signup")}
+            >
               Зареєструватися
             </Button>
           </div>

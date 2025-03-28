@@ -225,3 +225,10 @@
 .connectIcon {
   margin-right: 8px;
 }
+@media screen and (max-width: 840px) {
+  .syncInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

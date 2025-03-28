@@ -158,8 +158,8 @@ const TransactionChart = () => {
       <div className={styles.chartContainer}>
         <div className={styles.chartWrapper}>
           <LineChart
-            width={800}
-            height={300}
+            width={1400}
+            height={400}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -194,7 +194,7 @@ const TransactionChart = () => {
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}
             />
-            {/* Прогнозні лінії */}
+
             {showForecast && timeRange === "6m" && forecastData.length > 0 && (
               <>
                 <Line

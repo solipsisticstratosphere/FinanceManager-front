@@ -57,7 +57,8 @@
 
 /* Ensure the chart wrapper maintains aspect ratio */
 .chartWrapper {
-  min-width: 800px; /* Minimum width to prevent chart compression */
+  min-width: 600px;
+  min-width: 100%; /* Minimum width to prevent chart compression */
   height: 100%;
 }
 

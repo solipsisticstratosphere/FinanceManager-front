@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchBalance } from "../../redux/balance/operations";
@@ -7,6 +7,8 @@ import { fetchGoals } from "../../redux/goals/operations";
 import {
   calculateBudgetForecast,
   calculateGoalForecast,
+  fetchGoalForecasts,
+  fetchCategoryForecasts,
 } from "../../redux/forecasts/operations";
 import styles from "./Dashboard.module.css";
 import { selectUserName } from "../../redux/auth/selectors";
@@ -16,7 +18,13 @@ import GoalCard from "../GoalCard/GoalCard";
 import ForecastSection from "../ForecastSection/ForecastSection";
 import TransactionChart from "../TransactionChart/TransactionChart";
 import ExchangeRateCard from "../ExchangeRateCard/ExchangeRateCard";
+import DetailedForecastModal from "../DetailedForecastModal/DetailedForecastModal";
+import { BarChart3 } from "lucide-react";
+
 const Dashboard = () => {
+  const [isForecastModalOpen, setIsForecastModalOpen] = useState(false);
+  const [forecastModalTab, setForecastModalTab] = useState("goals");
+
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
 
@@ -26,7 +34,18 @@ const Dashboard = () => {
     dispatch(fetchBalance());
     dispatch(calculateBudgetForecast());
     dispatch(calculateGoalForecast());
+    dispatch(fetchGoalForecasts());
+    dispatch(fetchCategoryForecasts());
   }, [dispatch]);
+
+  const handleOpenForecastModal = (tab = "goals") => {
+    setForecastModalTab(tab);
+    setIsForecastModalOpen(true);
+  };
+
+  const handleCloseForecastModal = () => {
+    setIsForecastModalOpen(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -36,10 +55,17 @@ const Dashboard = () => {
             `Привіт, ${userName}`
           ) : (
             <Link to="/settings" className={styles.setupNameLink}>
-              Встановіть ім'я в налаштуваннях
+              Встановіть ім&apos;я в налаштуваннях
             </Link>
           )}
         </h1>
+        <button
+          className={styles.forecastButton}
+          onClick={() => handleOpenForecastModal("categories")}
+        >
+          <BarChart3 size={18} />
+          Детальні прогнози
+        </button>
       </div>
       <div className={styles.grid}>
         <BalanceCard />
@@ -49,6 +75,12 @@ const Dashboard = () => {
       </div>
       <ForecastSection />
       <TransactionChart />
+
+      <DetailedForecastModal
+        isOpen={isForecastModalOpen}
+        onClose={handleCloseForecastModal}
+        initialTab={forecastModalTab}
+      />
     </div>
   );
 };

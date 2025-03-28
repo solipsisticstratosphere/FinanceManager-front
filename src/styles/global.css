@@ -1,6 +1,5 @@
 /* Глобальні змінні */
 :root {
-  /* ========== Змінні для світлої теми ========== */
   --primary-background-color: #f9fafb;
   --primary-text-color: #2f2f2f;
 
@@ -20,8 +19,6 @@
   --dark-white: #f7f8f9;
   --blue-white: #407bff;
   --white-blue: #ecf2ff;
-
-  /* ========== Змінні для темної теми ========== */
 
   [data-theme="dark"] {
     --primary-background-color: #1c1d26;
@@ -44,7 +41,6 @@
 
   --font-family: "Roboto", sans-serif;
 
-  /* Breakpoints */
   --breakpoint-mobile: 320px;
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1440px;
@@ -53,7 +49,6 @@
   --font-size-base: 16px;
 }
 
-/* Скидання стилів */
 *,
 *::before,
 *::after {
@@ -96,7 +91,6 @@ button:hover {
   cursor: pointer;
 }
 
-/* Заголовки та текст */
 h1,
 h2,
 h3,
@@ -122,20 +116,17 @@ p {
   font-size: 14px;
 }
 
-/* Зображення */
 img {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
-/* Списки */
 ul,
 ol {
   list-style-type: none;
 }
 
-/* Контейнер */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -147,7 +138,6 @@ main {
   padding: var(--spacing-base);
 }
 
-/* Хедер і футер */
 .header,
 .footer {
   background-color: var(--primary-color-blue);
@@ -164,7 +154,6 @@ input {
   background-color: transparent;
 }
 
-/* Темна тема для основних елементів */
 [data-theme="dark"] body {
   background-color: var(--primary-background-color);
   color: var(--primary-text-color);
@@ -176,15 +165,9 @@ input {
   color: var(--primary-background-color);
 }
 
-/*[data-theme="dark"] a {*/
-/*  color: var(--primary-color);*/
-/*}*/
-
 [data-theme="dark"] a:hover {
   color: var(--secondary-color-5);
 }
-
-/* Адаптивний дизайн */
 
 @media (max-width: var(--breakpoint-mobile)) {
   :root {
