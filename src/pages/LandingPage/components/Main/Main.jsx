@@ -1,5 +1,7 @@
+"use client";
+
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay, Pagination, EffectFade } from "swiper/modules";
 import Button from "../../../../components/Buttons/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
@@ -14,6 +16,7 @@ import screenshot4 from "../../../../assets/pics/photo_2025-02-01_15-23-24.jpg";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
+import "swiper/css/effect-fade";
 
 // Navigation overlay component
 const NavigationOverlay = () => {
@@ -43,6 +46,7 @@ export default function Main() {
 
   return (
     <div className={css.landing}>
+      <div className={css.backgroundDecoration}></div>
       <div className={css.container}>
         <div className={css.content}>
           {/* Left Content Section */}
@@ -61,9 +65,29 @@ export default function Main() {
                   variant="primary"
                   size="large"
                   onClick={() => navigate("/signin")}
+                  className={css.ctaButton}
                 >
                   Почати користуватися
                 </Button>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={() => navigate("/demo")}
+                  className={css.secondaryButton}
+                >
+                  Переглянути демо
+                </Button>
+              </div>
+
+              <div className={css.trustBadges}>
+                <div className={css.trustItem}>
+                  <div className={css.trustIcon}>👥</div>
+                  <div className={css.trustText}>10,000+ користувачів</div>
+                </div>
+                <div className={css.trustItem}>
+                  <div className={css.trustIcon}>⭐</div>
+                  <div className={css.trustText}>4.8/5 рейтинг</div>
+                </div>
               </div>
             </div>
 
@@ -141,31 +165,34 @@ export default function Main() {
 
           {/* Right Slider Section */}
           <div className={css.rightSection}>
-            <Swiper
-              ref={swiperRef}
-              modules={[Pagination, Autoplay]}
-              pagination={{ clickable: true }}
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }}
-              loop={true}
-              spaceBetween={30}
-              slidesPerView={1}
-              className={css.swiper}
-            >
-              {screenshots.map((screenshot, index) => (
-                <SwiperSlide key={index} className={css.swiperSlide}>
-                  <img
-                    src={screenshot}
-                    alt={`Screenshot ${index + 1}`}
-                    className={css.slideImage}
-                  />
-                </SwiperSlide>
-              ))}
-              <NavigationOverlay />
-            </Swiper>
+            <div className={css.deviceFrame}>
+              <Swiper
+                ref={swiperRef}
+                modules={[Pagination, Autoplay, EffectFade]}
+                pagination={{ clickable: true }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
+                effect="fade"
+                loop={true}
+                spaceBetween={0}
+                slidesPerView={1}
+                className={css.swiper}
+              >
+                {screenshots.map((screenshot, index) => (
+                  <SwiperSlide key={index} className={css.swiperSlide}>
+                    <img
+                      src={screenshot || "/placeholder.svg"}
+                      alt={`Screenshot ${index + 1}`}
+                      className={css.slideImage}
+                    />
+                  </SwiperSlide>
+                ))}
+                <NavigationOverlay />
+              </Swiper>
+            </div>
           </div>
         </div>
       </div>
