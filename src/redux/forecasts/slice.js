@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   budgetForecasts: [],
+  budgetForecastData: null,
   goalForecast: null,
   isLoading: false,
   error: null,
@@ -47,6 +48,7 @@ const forecastsSlice = createSlice({
       .addCase(calculateBudgetForecast.fulfilled, (state, action) => {
         state.isLoading = false;
         state.budgetForecasts = action.payload.budgetForecasts;
+        state.budgetForecastData = action.payload;
         state.lastUpdated = action.payload.lastUpdated;
       })
       .addCase(calculateBudgetForecast.rejected, (state, action) => {
