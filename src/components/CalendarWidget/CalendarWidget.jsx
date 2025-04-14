@@ -44,7 +44,7 @@ const CalendarWidget = () => {
     return () => clearInterval(highlightInterval);
   }, []);
 
-  // Memoize color determination
+
   const getDayColor = useCallback((income, expenses) => {
     if (!income && !expenses) return styles.dayEmpty;
     const ratio = (income - expenses) / Math.max(income, expenses);
@@ -53,7 +53,7 @@ const CalendarWidget = () => {
     return styles.dayOrange;
   }, []);
 
-  // Memoize month navigation
+
   const navigateMonth = useCallback((direction) => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -62,7 +62,7 @@ const CalendarWidget = () => {
     });
   }, []);
 
-  // Memoize calendar days generation
+
   const generateCalendarDays = useMemo(() => {
     const days = [];
     const monthStart = new Date(
@@ -126,7 +126,8 @@ const CalendarWidget = () => {
     "September",
     "October",
     "November",
-    "December",
+    "December", 
+    
   ];
 
   return (

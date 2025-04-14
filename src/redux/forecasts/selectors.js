@@ -7,6 +7,9 @@ export const selectForecastsLastUpdated = (state) =>
 export const selectBudgetForecastForMonth = (state) =>
   state.forecasts.budgetForecasts[0];
 
+// New selector for the budget forecast data structure
+export const selectBudgetForecastData = (state) => state.forecasts.budgetForecastData;
+
 // New selectors for detailed goal forecasts
 export const selectDetailedGoalForecasts = (state) =>
   state.forecasts.detailedGoalForecasts.data;

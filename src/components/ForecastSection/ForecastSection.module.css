@@ -54,7 +54,7 @@
 .statsCard {
   margin-bottom: 5px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
 }
 
@@ -166,6 +166,106 @@
   text-decoration: underline;
 }
 
+/* Quick Estimates Styles */
+.quickEstimates {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.estimateItem {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+}
+
+.estimateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.estimateMonth {
+  font-weight: 600;
+  color: #111827;
+}
+
+.estimateConfidence {
+  font-size: 0.75rem;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.estimateDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.estimateRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.estimateRow span {
+  color: #6b7280;
+}
+
+.lastUpdated {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+/* Tab Styles */
+.tabsContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.tabButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tabButton:hover {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.activeTab {
+  background-color: #f3f4f6;
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.tabContent {
+  min-height: 200px;
+}
+
 @media (max-width: 768px) {
   .viewAllButton {
     font-size: 0.8rem;
@@ -173,5 +273,24 @@
 
   .statsValue {
     font-size: 1.25rem;
+  }
+
+  .estimateItem {
+    padding: 0.75rem;
+  }
+
+  .estimateHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .tabsContainer {
+    padding-bottom: 0.25rem;
+  }
+  
+  .tabButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
   }
 }
