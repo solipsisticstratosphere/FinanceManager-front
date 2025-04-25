@@ -44,7 +44,6 @@ const CalendarWidget = () => {
     return () => clearInterval(highlightInterval);
   }, []);
 
-
   const getDayColor = useCallback((income, expenses) => {
     if (!income && !expenses) return styles.dayEmpty;
     const ratio = (income - expenses) / Math.max(income, expenses);
@@ -53,7 +52,6 @@ const CalendarWidget = () => {
     return styles.dayOrange;
   }, []);
 
-
   const navigateMonth = useCallback((direction) => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -61,7 +59,6 @@ const CalendarWidget = () => {
       return newDate;
     });
   }, []);
-
 
   const generateCalendarDays = useMemo(() => {
     const days = [];
@@ -126,8 +123,7 @@ const CalendarWidget = () => {
     "September",
     "October",
     "November",
-    "December", 
-    
+    "December",
   ];
 
   return (
