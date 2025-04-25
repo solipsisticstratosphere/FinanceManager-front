@@ -10,6 +10,7 @@ import PublicRegisterRoute from "../../routes/PublicRegisterRoute";
 import PublicLayout from "../PublicLayout/PublicLayout";
 import { Toaster } from "react-hot-toast";
 import ConfirmOAuth from "../../pages/ConfirmOAuth/ConfirmOAuth";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 // Lazy load components
 const LandingPage = lazy(() => import("../../pages/LandingPage/LandingPage"));
@@ -56,104 +57,106 @@ export default function App() {
   return (
     <>
       <Toaster />
-      <Suspense fallback={<LoadingSpinner />}>
-        <Routes>
-          <Route index element={<Navigate to="/landing" />} />
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route index element={<Navigate to="/landing" />} />
 
-          {/* Public routes with PublicLayout */}
-          <Route element={<PublicLayout />}>
-            <Route
-              path="/landing"
-              element={
-                <PublicRoute
-                  component={
-                    <Suspense fallback={<LoadingSpinner />}>
-                      <LandingPage />
-                    </Suspense>
-                  }
-                  redirectTo="/home"
-                />
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <PublicRegisterRoute
-                  component={
-                    <Suspense fallback={<LoadingSpinner />}>
-                      <SignupPage />
-                    </Suspense>
-                  }
-                  redirectTo="/signin"
-                />
-              }
-            />
-            <Route
-              path="/signin"
-              element={
-                <PublicRoute
-                  component={
-                    <Suspense fallback={<LoadingSpinner />}>
-                      <SinginPage />
-                    </Suspense>
-                  }
-                  redirectTo="/home"
-                />
-              }
-            />
-          </Route>
+            {/* Public routes with PublicLayout */}
+            <Route element={<PublicLayout />}>
+              <Route
+                path="/landing"
+                element={
+                  <PublicRoute
+                    component={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <LandingPage />
+                      </Suspense>
+                    }
+                    redirectTo="/home"
+                  />
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <PublicRegisterRoute
+                    component={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <SignupPage />
+                      </Suspense>
+                    }
+                    redirectTo="/signin"
+                  />
+                }
+              />
+              <Route
+                path="/signin"
+                element={
+                  <PublicRoute
+                    component={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <SinginPage />
+                      </Suspense>
+                    }
+                    redirectTo="/home"
+                  />
+                }
+              />
+            </Route>
 
-          {/* Private routes */}
-          <Route
-            path="/"
-            element={
-              <PrivateRoute component={<Layout />} redirectTo="/signin" />
-            }
-          >
+            {/* Private routes */}
             <Route
-              path="home"
+              path="/"
               element={
-                <Suspense fallback={<LoadingSpinner />}>
-                  <MainPage />
-                </Suspense>
+                <PrivateRoute component={<Layout />} redirectTo="/signin" />
               }
-            />
-            <Route
-              path="goals"
-              element={
-                <Suspense fallback={<LoadingSpinner />}>
-                  <GoalsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="transactions"
-              element={
-                <Suspense fallback={<LoadingSpinner />}>
-                  <TransactionsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="analytics"
-              element={
-                <Suspense fallback={<LoadingSpinner />}>
-                  <AnalyticsPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="settings"
-              element={
-                <Suspense fallback={<LoadingSpinner />}>
-                  <SettingsPage />
-                </Suspense>
-              }
-            />
-          </Route>
-          <Route path="/confirm-google-auth" element={<ConfirmOAuth />} />
-        </Routes>
-      </Suspense>
+            >
+              <Route
+                path="home"
+                element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <MainPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="goals"
+                element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <GoalsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="transactions"
+                element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <TransactionsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="analytics"
+                element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <AnalyticsPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <SettingsPage />
+                  </Suspense>
+                }
+              />
+            </Route>
+            <Route path="/confirm-google-auth" element={<ConfirmOAuth />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }

@@ -131,7 +131,7 @@ const Auth = () => {
       <div className={styles.formWrapper}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            {isSignIn ? "Увiйти до аккаунту" : "Реєстрація"}
+            {isSignIn ? "Увiйти до акаунту" : "Реєстрація"}
           </h2>
         </div>
 
