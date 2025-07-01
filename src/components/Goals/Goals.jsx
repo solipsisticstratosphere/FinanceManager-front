@@ -1,17 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import {
   createGoal,
   deactivateGoal,
   deleteGoal,
-  fetchGoals,
   setActiveGoal,
 } from "../../redux/goals/operations";
 import {
-  selectActiveGoal,
   selectGoals,
   selectGoalsError,
   selectGoalsLoading,
@@ -19,6 +14,15 @@ import {
 import styles from "./Goals.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 import toast from "react-hot-toast";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Trash2,
+  AlertOctagon,
+} from "lucide-react";
 
 const GoalSchema = Yup.object().shape({
   title: Yup.string()
@@ -37,11 +41,9 @@ const Goals = () => {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
   const goals = useSelector(selectGoals);
-  const activeGoal = useSelector(selectActiveGoal);
   const isLoadingGoals = useSelector(selectGoalsLoading);
   const goalsError = useSelector(selectGoalsError);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -103,6 +105,56 @@ const Goals = () => {
     }
   }, []);
 
+  const getDaysRemaining = (deadline) => {
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+    const diffTime = deadlineDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const getGoalStatus = (goal) => {
+    const isExpired = new Date(goal.deadline) < new Date();
+    const isCompleted = goal.currentAmount >= goal.targetAmount;
+    const isNegative = goal.currentAmount < 0;
+
+    if (isCompleted) return "completed";
+    if (isExpired) return "expired";
+    if (isNegative) return "negative";
+    if (goal.isActive) return "active";
+    return "inactive";
+  };
+
+  const getGoalStatusComponent = (goal) => {
+    const status = getGoalStatus(goal);
+
+    switch (status) {
+      case "completed":
+        return (
+          <div className={styles.statusBadge}>
+            <CheckCircle size={16} className={styles.statusIcon} />
+            <span>Завершено</span>
+          </div>
+        );
+      case "expired":
+        return (
+          <div className={`${styles.statusBadge} ${styles.statusExpired}`}>
+            <AlertTriangle size={16} className={styles.statusIcon} />
+            <span>Прострочено</span>
+          </div>
+        );
+      case "negative":
+        return (
+          <div className={`${styles.statusBadge} ${styles.statusNegative}`}>
+            <AlertOctagon size={16} className={styles.statusIcon} />
+            <span>Від&apos;ємне значення</span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -122,41 +174,84 @@ const Goals = () => {
           <p className={styles.error}>Помилка: {goalsError}</p>
         ) : goals && goals.length > 0 ? (
           goals.map((goal) => {
-            const isExpired = new Date(goal.deadline) < new Date();
+            const status = getGoalStatus(goal);
+            const progressPercentage =
+              (goal.currentAmount / goal.targetAmount) * 100;
+            const daysRemaining = getDaysRemaining(goal.deadline);
+            const showUrgentBadge = daysRemaining > 0 && daysRemaining <= 5;
+
             return (
               <div
                 key={goal._id}
                 className={`${styles.goalItem} ${
-                  goal.isActive ? styles.activeGoal : ""
-                } ${isExpired ? styles.expiredGoal : ""}`}
+                  styles[
+                    `goal${status.charAt(0).toUpperCase() + status.slice(1)}`
+                  ]
+                }`}
               >
                 <div className={styles.goalContent}>
-                  <h3 className={styles.goalTitle}>
-                    {goal.title}
-                    {isExpired && (
-                      <span className={styles.expiredLabel}>Просрочено</span>
-                    )}
-                  </h3>
+                  <div className={styles.goalTitleWrapper}>
+                    <h3 className={styles.goalTitle}>{goal.title}</h3>
+                    {getGoalStatusComponent(goal)}
+                  </div>
+
                   <div className={styles.goalProgress}>
                     <div
-                      className={styles.progressBar}
+                      className={`${styles.progressBar} ${
+                        status === "completed" ? styles.progressCompleted : ""
+                      } ${status === "expired" ? styles.progressExpired : ""} ${
+                        status === "negative" ? styles.progressNegative : ""
+                      }`}
                       style={{
-                        width: `${
-                          (goal.currentAmount / goal.targetAmount) * 100
-                        }%`,
+                        width: `${Math.min(
+                          Math.max(0, progressPercentage),
+                          100
+                        )}%`,
                       }}
-                    />
+                    >
+                      {progressPercentage > 15 && (
+                        <span className={styles.progressText}>
+                          {progressPercentage.toFixed(0)}%
+                        </span>
+                      )}
+                    </div>
+                    {progressPercentage <= 15 && (
+                      <span className={styles.progressTextOutside}>
+                        {progressPercentage.toFixed(0)}%
+                      </span>
+                    )}
                   </div>
+
                   <p className={styles.goalAmount}>
                     <CurrencyDisplay amount={goal.currentAmount} /> /{" "}
                     <CurrencyDisplay amount={goal.targetAmount} />
                   </p>
-                  <p className={styles.goalDeadline}>
-                    До: {new Date(goal.deadline).toLocaleDateString()}
-                  </p>
+
+                  <div className={styles.goalDeadlineContainer}>
+                    <p
+                      className={`${styles.goalDeadline} ${
+                        status === "expired" ? styles.deadlineExpired : ""
+                      }`}
+                    >
+                      <Clock size={14} className={styles.deadlineIcon} />
+                      До: {new Date(goal.deadline).toLocaleDateString()}
+                    </p>
+
+                    {showUrgentBadge && (
+                      <span className={styles.urgentBadge}>
+                        Залишилося {daysRemaining}{" "}
+                        {daysRemaining === 1
+                          ? "день"
+                          : daysRemaining < 5
+                          ? "дні"
+                          : "днів"}
+                      </span>
+                    )}
+                  </div>
                 </div>
+
                 <div className={styles.goalActions}>
-                  {!goal.isActive && !isExpired ? (
+                  {!goal.isActive && status !== "expired" ? (
                     <button
                       onClick={() => handleGoalAction(goal._id, "activate")}
                       className={styles.activateButton}
@@ -175,6 +270,7 @@ const Goals = () => {
                     onClick={() => handleGoalAction(goal._id, "delete")}
                     className={styles.deleteButton}
                   >
+                    <Trash2 size={16} />
                     Видалити
                   </button>
                 </div>
@@ -202,7 +298,7 @@ const Goals = () => {
               validationSchema={GoalSchema}
               onSubmit={handleCreateGoal}
             >
-              {({ errors, touched, isValid, dirty }) => (
+              {({ errors, touched, isValid, dirty, setFieldValue, values }) => (
                 <Form className={styles.form}>
                   <div className={styles.formGroup}>
                     <Field
@@ -223,15 +319,27 @@ const Goals = () => {
                       name="targetAmount"
                       type="number"
                       placeholder="Сума цілі"
+                      min="0"
                       className={`${styles.input} ${
                         errors.targetAmount && touched.targetAmount
                           ? styles.inputError
                           : ""
                       }`}
+                      onChange={(e) => {
+                        const value = parseFloat(e.target.value);
+                        if (isNaN(value) || value >= 0) {
+                          setFieldValue("targetAmount", e.target.value);
+                        }
+                      }}
                     />
                     {errors.targetAmount && touched.targetAmount && (
                       <div className={styles.errorMessage}>
                         {errors.targetAmount}
+                      </div>
+                    )}
+                    {values.targetAmount < 0 && (
+                      <div className={styles.errorMessage}>
+                        Значення не може бути від&apos;ємним
                       </div>
                     )}
                   </div>

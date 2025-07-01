@@ -1,4 +1,3 @@
-/* Base styles */
 .container {
   padding: 1.5rem;
   max-width: 72rem;
@@ -126,6 +125,60 @@
   word-break: break-word;
 }
 
+.forecastToggleButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.forecastToggleButton:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.forecastToggleDisabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background-color: #e2e8f0;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.toggleActive {
+  background-color: #3b82f6;
+}
+
+.toggleSlider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.toggleActive .toggleSlider {
+  left: calc(100% - 18px);
+}
+
 .forecastToggle {
   display: flex;
   align-items: center;
@@ -152,7 +205,6 @@
   opacity: 0.5;
 }
 
-/* Tablet styles */
 @media screen and (max-width: 1024px) {
   .container {
     padding: 1.25rem;
@@ -168,7 +220,6 @@
   }
 }
 
-/* Small tablet styles */
 @media screen and (max-width: 768px) {
   .container {
     padding: 1rem;
@@ -245,7 +296,8 @@
   }
 
   .timeRangeButtons,
-  .forecastToggle {
+  .forecastToggle,
+  .forecastToggleButton {
     display: none;
   }
 }

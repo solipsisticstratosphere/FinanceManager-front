@@ -16,9 +16,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .title {
@@ -55,6 +55,25 @@
   box-shadow: 0 4px 6px rgba(40, 182, 234, 0.35);
 }
 
+/* Section header styles */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #3b82f6;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
 /* Tablet styles */
 @media screen and (max-width: 1024px) {
   .container {
@@ -63,7 +82,7 @@
 
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
   .title {
@@ -79,7 +98,7 @@
 
   .grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.875rem;
   }
 
   .header {
@@ -101,7 +120,6 @@
     font-size: 0.875rem;
   }
 
-  /* Ensure charts and forecasts are scrollable on mobile */
   .chartContainer,
   .forecastContainer {
     overflow-x: auto;

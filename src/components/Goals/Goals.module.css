@@ -16,6 +16,64 @@
   font-size: 0.8em;
 }
 
+.goalExpired {
+  border: 2px solid rgba(239, 68, 68, 0.5);
+  background-color: rgba(254, 242, 242, 0.7);
+}
+
+.goalCompleted {
+  border: 2px solid rgba(34, 197, 94, 0.5);
+  background-color: rgba(240, 253, 244, 0.7);
+}
+
+.goalActive {
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  background-color: rgba(239, 246, 255, 0.7);
+}
+
+.goalNegative {
+  border: 2px solid rgba(220, 38, 38, 0.5);
+  background-color: rgba(254, 226, 226, 0.7);
+}
+
+.goalInactive {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #22c55e;
+  color: white;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.statusExpired {
+  background-color: #ef4444;
+}
+
+.statusNegative {
+  background-color: #7e22ce;
+}
+
+.statusIcon {
+  flex-shrink: 0;
+}
+
+.goalTitleWrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -82,8 +140,8 @@
 .goalTitle {
   font-size: 1.375rem;
   font-weight: 700;
-  margin-bottom: 1.25rem;
   color: #1e3a8a;
+  margin: 0;
 }
 
 .goalProgress {
@@ -92,12 +150,45 @@
   border-radius: 1rem;
   overflow: hidden;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .progressBar {
   height: 100%;
   background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
   transition: width 0.4s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressCompleted {
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+}
+
+.progressExpired {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.progressNegative {
+  background: linear-gradient(90deg, #7e22ce 0%, #6b21a8 100%);
+}
+
+.progressText {
+  font-size: 0.625rem;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.progressTextOutside {
+  position: absolute;
+  right: 0;
+  top: -1.25rem;
+  font-size: 0.625rem;
+  color: #6b7280;
+  font-weight: 600;
 }
 
 .goalAmount {
@@ -107,9 +198,40 @@
   margin-bottom: 0.75rem;
 }
 
+.goalDeadlineContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .goalDeadline {
   color: #6b7280;
   font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.deadlineExpired {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.deadlineIcon {
+  flex-shrink: 0;
+}
+
+.urgentBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #f59e0b;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
 }
 
 .goalActions {
@@ -119,8 +241,7 @@
 }
 
 .activateButton,
-.deactivateButton,
-.deleteButton {
+.deactivateButton {
   padding: 0.625rem 1.25rem;
   border-radius: 0.75rem;
   font-weight: 600;
@@ -128,6 +249,26 @@
   transition: all 0.3s ease;
   flex: 1;
   text-align: center;
+}
+
+.deleteButton {
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.deleteButton:hover {
+  background-color: rgba(239, 68, 68, 0.1);
 }
 
 .activateButton {
@@ -148,16 +289,6 @@
 
 .deactivateButton:hover {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-}
-
-.deleteButton {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  border: none;
-}
-
-.deleteButton:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
 
 .formGroup {
@@ -255,95 +386,93 @@
 
 .inputError {
   border-color: #ef4444;
-  background: rgba(254, 242, 242, 0.6);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
 }
 
 .inputError:focus {
   border-color: #ef4444;
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
 }
 
 .errorMessage {
-  color: #dc2626;
-  font-size: 0.875rem;
+  color: #ef4444;
+  font-size: 0.75rem;
   margin-top: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(254, 242, 242, 0.7);
-  border-radius: 0.5rem;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  gap: 0.25rem;
+  animation: fadeIn 0.2s ease;
+  padding-left: 0.25rem;
 }
 
 .errorMessage::before {
-  content: "⚠️";
-  font-size: 1rem;
+  content: "⚠";
+  font-size: 0.875rem;
 }
 
 .modalActions {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
 }
 
 .primaryButton,
 .secondaryButton {
-  padding: 1rem 1.5rem;
-  border-radius: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   font-size: 0.9375rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  flex: 1;
-  text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .primaryButton {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   border: none;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
 }
 
 .primaryButton:hover:not(:disabled) {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .primaryButton:disabled {
-  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+  opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
 .secondaryButton {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  color: #4b5563;
-  border: 1px solid #e5e7eb;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #64748b;
 }
 
 .secondaryButton:hover {
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: #f8fafc;
+  border-color: #d1d5db;
 }
 
 input[type="date"] {
   appearance: none;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 1rem 1.25rem;
+  padding-right: 2.5rem;
+  position: relative;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
+  background-color: transparent;
   cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
+  opacity: 0.7;
 }
 
 @keyframes fadeIn {
@@ -366,7 +495,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 }
 
-/* Tablet Breakpoint */
 @media (max-width: 1024px) {
   .container {
     padding: 1.5rem;
@@ -377,7 +505,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 
   .goalsList {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 
   .goalItem {
@@ -385,31 +513,31 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 
   .modalContent {
+    max-width: 450px;
     padding: 2rem;
-    width: 95%;
   }
 }
 
-/* Mobile Breakpoint */
 @media (max-width: 640px) {
   .container {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
   }
 
   .header {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
     gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .title {
     font-size: 1.5rem;
-    text-align: center;
+    margin-bottom: 0;
   }
 
   .addButton {
     width: 100%;
-    padding: 1rem;
+    text-align: center;
   }
 
   .goalsList {
@@ -423,31 +551,31 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
   .goalTitle {
     font-size: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .expiredLabel {
-    margin-left: 0;
+    display: block;
+    margin: 0.25rem 0 0 0;
   }
 
   .goalActions {
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .activateButton,
   .deactivateButton,
   .deleteButton {
     width: 100%;
-    padding: 0.875rem;
+    padding: 0.5rem 1rem;
   }
 
   .modalContent {
     padding: 1.5rem;
     margin: 0.75rem;
-    width: 100%;
+    width: calc(100% - 1.5rem);
     max-height: 90vh;
     overflow-y: auto;
   }
@@ -463,29 +591,27 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
   .input {
     padding: 0.875rem 1rem;
-    font-size: 0.9375rem;
   }
 
   .modalActions {
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
   }
 
   .primaryButton,
   .secondaryButton {
     width: 100%;
-    padding: 0.875rem;
+    padding: 0.75rem 1rem;
   }
 }
 
-/* Small Mobile Breakpoint */
 @media (max-width: 380px) {
   .container {
-    padding: 0.75rem;
+    padding: 1rem 0.75rem;
   }
 
   .title {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
   }
 
   .goalItem {
@@ -503,15 +629,16 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   .modalContent {
     padding: 1.25rem;
     margin: 0.5rem;
+    border-radius: 1rem;
   }
 }
 
-/* Landscape Mode */
 @media (max-height: 480px) and (orientation: landscape) {
   .modalContent {
     max-height: 85vh;
+    padding: 1.25rem;
+    margin: 1rem;
     overflow-y: auto;
-    padding: 1rem;
   }
 
   .modalTitle {
@@ -523,9 +650,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 }
 
-/* High-DPI Screens */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .goalItem {
-    border-width: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
   }
 }

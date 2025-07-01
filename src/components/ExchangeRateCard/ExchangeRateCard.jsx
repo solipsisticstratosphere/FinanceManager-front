@@ -1,24 +1,33 @@
-// src/components/ExchangeRateCard/ExchangeRateCard.jsx
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchExchangeRates } from "../../utils/currencyService";
 import styles from "./ExchangeRateCard.module.css";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 const ExchangeRateCard = () => {
   const [rates, setRates] = useState(null);
+  const [prevRates, setPrevRates] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
 
-  // Currencies to display
-  const displayCurrencies = ["USD", "EUR", "GBP"];
-  const baseCurrency = "UAH";
+  const displayCurrencies = [
+    { code: "USD", flag: "🇺🇸" },
+    { code: "EUR", flag: "🇪🇺" },
+    { code: "GBP", flag: "🇬🇧" },
+  ];
 
   useEffect(() => {
     const loadRates = async () => {
       setIsLoading(true);
       try {
         const fetchedRates = await fetchExchangeRates();
+
+        if (rates) {
+          setPrevRates(rates);
+        } else {
+          setPrevRates(fetchedRates);
+        }
+
         setRates(fetchedRates);
         setLastUpdated(new Date());
         setError(null);
@@ -32,7 +41,6 @@ const ExchangeRateCard = () => {
 
     loadRates();
 
-    // Refresh rates every 30 minutes
     const intervalId = setInterval(loadRates, 30 * 60 * 1000);
 
     return () => clearInterval(intervalId);
@@ -46,6 +54,21 @@ const ExchangeRateCard = () => {
 
     const uahPerUnit = 1 / ratePerUAH;
     return uahPerUnit.toFixed(2);
+  };
+
+  const getRateChange = (currency) => {
+    if (!rates || !prevRates || !rates[currency] || !prevRates[currency])
+      return null;
+
+    const currentRate = 1 / rates[currency];
+    const previousRate = 1 / prevRates[currency];
+    const change = currentRate - previousRate;
+
+    return {
+      value: Math.abs(change).toFixed(2),
+      isPositive: change > 0,
+      isNeutral: Math.abs(change) < 0.01,
+    };
   };
 
   const formatLastUpdated = (date) => {
@@ -78,13 +101,33 @@ const ExchangeRateCard = () => {
         <div className={styles.ratesContainer}>
           {displayCurrencies
             .map((currency) => {
-              const rate = getExchangeRate(currency);
+              const rate = getExchangeRate(currency.code);
+              const change = getRateChange(currency.code);
               if (!rate) return null;
 
               return (
-                <div key={currency} className={styles.rateItem}>
-                  <span className={styles.currencyCode}>{currency}</span>
-                  <span className={styles.rateValue}>{rate}</span>
+                <div key={currency.code} className={styles.rateItem}>
+                  <span className={styles.currencyCode}>
+                    <span className={styles.currencyFlag}>{currency.flag}</span>
+                    {currency.code}
+                  </span>
+                  <div className={styles.rateInfo}>
+                    <span className={styles.rateValue}>{rate}</span>
+                    {change && !change.isNeutral && (
+                      <span
+                        className={`${styles.rateChange} ${
+                          change.isPositive ? styles.positive : styles.negative
+                        }`}
+                      >
+                        {change.isPositive ? (
+                          <ArrowUpRight size={14} />
+                        ) : (
+                          <ArrowDownRight size={14} />
+                        )}
+                        {change.value} ₴
+                      </span>
+                    )}
+                  </div>
                 </div>
               );
             })

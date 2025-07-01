@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectTransactions } from "../../redux/transactions/selectors";
 import {
-  CartesianAxis,
   CartesianGrid,
   Legend,
   Line,
@@ -11,9 +10,11 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import PropTypes from "prop-types";
 import styles from "./TransactionChart.module.css";
 import CurrencyDisplay from "../CurrencyDisplay/CurrencyDisplay";
 import { selectBudgetForecast } from "../../redux/forecasts/selectors";
+import { TrendingUp } from "lucide-react";
 
 const TransactionChart = () => {
   const [timeRange, setTimeRange] = useState("7d");
@@ -115,6 +116,18 @@ const TransactionChart = () => {
     return null;
   };
 
+  CustomTooltip.propTypes = {
+    active: PropTypes.bool,
+    payload: PropTypes.arrayOf(
+      PropTypes.shape({
+        color: PropTypes.string,
+        name: PropTypes.string,
+        value: PropTypes.number,
+      })
+    ),
+    label: PropTypes.string,
+  };
+
   const timeRangeButtons = [
     { value: "7d", label: "7 днів" },
     { value: "1m", label: "1 місяць" },
@@ -122,24 +135,39 @@ const TransactionChart = () => {
     { value: "1y", label: "1 рік" },
   ];
 
+  const handleToggleForecast = () => {
+    if (timeRange === "6m") {
+      setShowForecast(!showForecast);
+    }
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.chartHeader}>
         <div className={styles.chartControls}>
           <h2 className={styles.title}>Динаміка за період</h2>
-          <label
-            className={`${styles.forecastToggle} ${
+          <button
+            className={`${styles.forecastToggleButton} ${
               timeRange !== "6m" ? styles.forecastToggleDisabled : ""
             }`}
+            onClick={handleToggleForecast}
+            disabled={timeRange !== "6m"}
+            title={
+              timeRange !== "6m"
+                ? "Доступно тільки для періоду 6 місяців"
+                : "Показати/приховати прогноз"
+            }
           >
-            <input
-              type="checkbox"
-              checked={showForecast}
-              onChange={(e) => setShowForecast(e.target.checked)}
-              disabled={timeRange !== "6m"}
-            />
-            Показати прогноз
-          </label>
+            <TrendingUp size={16} />
+            <span>Прогноз</span>
+            <div
+              className={`${styles.toggleSwitch} ${
+                showForecast ? styles.toggleActive : ""
+              }`}
+            >
+              <div className={styles.toggleSlider}></div>
+            </div>
+          </button>
         </div>
         <div className={styles.timeRangeButtons}>
           {timeRangeButtons.map((button) => (

@@ -19,7 +19,7 @@ import ForecastSection from "../ForecastSection/ForecastSection";
 import TransactionChart from "../TransactionChart/TransactionChart";
 import ExchangeRateCard from "../ExchangeRateCard/ExchangeRateCard";
 import DetailedForecastModal from "../DetailedForecastModal/DetailedForecastModal";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, LayoutDashboard } from "lucide-react";
 
 const Dashboard = () => {
   const [isForecastModalOpen, setIsForecastModalOpen] = useState(false);
@@ -67,12 +67,23 @@ const Dashboard = () => {
           Детальні прогнози
         </button>
       </div>
+
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>
+          <LayoutDashboard
+            size={18}
+            style={{ marginRight: "8px", verticalAlign: "text-bottom" }}
+          />
+          Основні показники
+        </h2>
+      </div>
       <div className={styles.grid}>
         <BalanceCard />
         <ExpensesCard />
         <GoalCard />
         <ExchangeRateCard />
       </div>
+
       <ForecastSection />
       <TransactionChart />
 

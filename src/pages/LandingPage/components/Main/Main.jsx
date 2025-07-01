@@ -12,13 +12,11 @@ import screenshot2 from "../../../../assets/pics/photo_2025-02-01_15-04-17.jpg";
 import screenshot3 from "../../../../assets/pics/photo_2025-02-01_15-09-56.jpg";
 import screenshot4 from "../../../../assets/pics/photo_2025-02-01_15-23-24.jpg";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 
-// Navigation overlay component
 const NavigationOverlay = () => {
   const swiper = useSwiper();
 
@@ -69,14 +67,14 @@ export default function Main() {
                 >
                   Почати користуватися
                 </Button>
-                <Button
+                {/* <Button
                   variant="outline"
                   size="large"
                   onClick={() => navigate("/demo")}
                   className={css.secondaryButton}
                 >
                   Переглянути демо
-                </Button>
+                </Button> */}
               </div>
 
               <div className={css.trustBadges}>
